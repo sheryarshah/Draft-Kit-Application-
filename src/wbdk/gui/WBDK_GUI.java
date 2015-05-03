@@ -53,6 +53,7 @@ import static wbdk.WBDK_StartupConstants.PATH_IMAGES;
 import wbdk.controller.DraftEditController;
 import wbdk.controller.FantasyTeamScreenEditController;
 import wbdk.controller.FileController;
+import wbdk.controller.PlayerFirstNameComparator;
 import wbdk.controller.PlayerScreenEditController;
 import wbdk.data.Draft;
 import wbdk.data.Player;
@@ -255,16 +256,19 @@ public class WBDK_GUI implements WBDKDataView {
     HBox fantasyTeamEditSelectBox;
     VBox fantasyTeamTableBox;
 
+    //TEXTFIELD USED TO NAME AND SAVE A DRAFT 
     Label draftNameLabel;
     TextField draftNameTextField;
     GridPane draftNamePane;
 
+    //BUTTONS FOR ADDING, REMOVING AND EDITING TEAM NAME AND OWNER
     FlowPane addRemoveEditPane;
     Button addTeamButton;
     Button removeTeamButton;
     Button editTeamButton;
     boolean activateButton = false;
 
+    //COMBOBOX USED TO SELECT FANTASY TEAM
     GridPane selectTeamPane;
     Label selectTeamLabel;
     ComboBox<Team> teamSelectionCombo;
@@ -273,6 +277,7 @@ public class WBDK_GUI implements WBDKDataView {
     Label startingLineupLabel;
     VBox taxiTeamTableBox;
 
+    //TABLE FOR FANTASY TEAM STARTING LINEUP
     TableView<Team> fantasyTeamTable;
     TableColumn positionSelected;
     TableColumn firstName;
@@ -290,6 +295,7 @@ public class WBDK_GUI implements WBDKDataView {
 
     Label taxiSquadLabel;
 
+    //TABLE FOR FANTASY TEAM TAXI SQUAD
     TableView<Team> taxiTeamTable;
     TableColumn positionSelected1;
     TableColumn firstName1;
@@ -305,9 +311,28 @@ public class WBDK_GUI implements WBDKDataView {
     TableColumn contract1;
     TableColumn salary1;
 
+    //TABLE COLUMNS CONSTANTS FOR FANTASY TEAM
     static final String COL_POS = "Position";
     static final String COL_CONTRACT = "Contract";
     static final String COL_SALARY = "Salary";
+
+    //BELOW IS THE STUFF FOR MLB TEAM SCREEN
+    VBox mlbTeamBox;
+    HBox mlbTeamSelectBox;
+    ;
+    VBox mlbTeamTableBox;
+    Label proTeamPlayerLabel;
+
+    //COMBOBOX USED TO SELECT FANTASY TEAM
+    GridPane selectProTeamPane;
+    Label selectProTeamLabel;
+    ComboBox proTeamCombo;
+    int trackTeam;                //keeps track of proTeam selected
+
+    TableView<Player> mlbTeamTable;
+    TableColumn firstName2;
+    TableColumn lastName2;
+    TableColumn qualifyingPosition;
 
     /**
      * Constructor for making this GUI, note that it does not initialize the UI
@@ -484,9 +509,9 @@ public class WBDK_GUI implements WBDKDataView {
 
         draftController.enable(true);
     }
-    
+
     @Override
-    public void resetComboBox(){
+    public void resetComboBox() {
         if (!workspaceActivated) {
             try {
                 activateWorkspace();
@@ -1096,10 +1121,151 @@ public class WBDK_GUI implements WBDKDataView {
     }
 
     // INITIALIZES THE MLB TEAM SCREEN WORKWPACE UI
-    public void initMLBTeamScreenWorkspace() {
+    public void initMLBTeamScreenWorkspace() throws IOException {
+
         topWorkspacePaneMLB = new VBox();
         topWorkspacePaneMLB.getStyleClass().add(CLASS_BORDERED_PANE);
         MLBScreenHeadingLabel = initChildLabel(topWorkspacePaneMLB, WBDK_PropertyType.MLB_TEAM_HEADING_LABEL, CLASS_HEADING_LABEL);
+
+        mlbTeamBox = new VBox();
+        mlbTeamSelectBox = new HBox();
+
+        selectProTeamPane = new GridPane();
+        selectProTeamLabel = initGridLabel(selectProTeamPane, WBDK_PropertyType.SELECT_MLB_TEAM_LABEL, CLASS_PROMPT_LABEL, 0, 1, 1, 1);
+        proTeamCombo = initGridComboBox(selectProTeamPane, 1, 1, 1, 1);
+
+        mlbTeamSelectBox.getChildren().add(selectProTeamPane);
+
+        ObservableList<String> proTeam = FXCollections.observableArrayList();
+        proTeam.addAll("ATL", "AZ", "CHC", "CIN", "LAD", "MIA", "MIL", "PHI", "PIT",
+                "SD", "SF", "STL", "WSH");
+        proTeamCombo.getItems().addAll(proTeam);
+        proTeamCombo.setValue(proTeam.get(0));
+        proTeamCombo.setVisibleRowCount(3);
+
+        mlbTeamTableBox = new VBox();
+
+        proTeamPlayerLabel = initLabel(WBDK_PropertyType.PRO_TEAM_HEADING_LABEL, CLASS_SUBHEADING_LABEL);
+
+        mlbTeamTable = new TableView();
+        firstName2 = new TableColumn(COL_FIRST);
+        lastName2 = new TableColumn(COL_LAST);
+        qualifyingPosition = new TableColumn(COL_POSITIONS);
+
+        //MAKE MLB TEAM TABLE EDITABLE
+        mlbTeamTable.setEditable(true);
+
+        //START ADDING THE COLUMNS
+        mlbTeamTable.getColumns().add(firstName2);
+        mlbTeamTable.getColumns().add(lastName2);
+        mlbTeamTable.getColumns().add(qualifyingPosition);
+
+        mlbTeamTable.setPrefHeight(600);
+        mlbTeamTableBox.getChildren().add(proTeamPlayerLabel);
+        mlbTeamTableBox.setSpacing(20);
+        mlbTeamTableBox.getChildren().add(mlbTeamTable);
+
+        firstName2.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastName2.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        qualifyingPosition.setCellValueFactory(new PropertyValueFactory<>("qp"));
+
+        dataManager.getDraft().clearATL();
+        mlbTeamTable.setItems(dataManager.getDraft().getATL().sorted(new PlayerFirstNameComparator()));
+        proTeamCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
+
+            if (newValue.equals("ATL")) {
+                dataManager.getDraft().clearATL();
+                mlbTeamTable.setItems(dataManager.getDraft().getATL().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("AZ")) {
+                dataManager.getDraft().clearAZ();
+                mlbTeamTable.setItems(dataManager.getDraft().getAZ().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("CHC")) {
+                dataManager.getDraft().clearCHC();
+                mlbTeamTable.setItems(dataManager.getDraft().getCHC().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("CIN")) {
+                dataManager.getDraft().clearCIN();
+                mlbTeamTable.setItems(dataManager.getDraft().getCIN().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("COL")) {
+                dataManager.getDraft().clearCOL();
+                mlbTeamTable.setItems(dataManager.getDraft().getCOL().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("LAD")) {
+                dataManager.getDraft().clearLAD();
+                mlbTeamTable.setItems(dataManager.getDraft().getLAD().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("MIA")) {
+                dataManager.getDraft().clearMIA();
+                mlbTeamTable.setItems(dataManager.getDraft().getMIA().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("MIL")) {
+                dataManager.getDraft().clearMIL();
+                mlbTeamTable.setItems(dataManager.getDraft().getMIL().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("NYM")) {
+                dataManager.getDraft().clearNYM();
+                mlbTeamTable.setItems(dataManager.getDraft().getNYM().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("PHI")) {
+                dataManager.getDraft().clearPHI();
+                mlbTeamTable.setItems(dataManager.getDraft().getPHI().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("PIT")) {
+                dataManager.getDraft().clearPIT();
+                mlbTeamTable.setItems(dataManager.getDraft().getPIT().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("SD")) {
+                dataManager.getDraft().clearSD();
+                mlbTeamTable.setItems(dataManager.getDraft().getSD().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("SF")) {
+                dataManager.getDraft().clearSF();
+                mlbTeamTable.setItems(dataManager.getDraft().getSF().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("STL")) {
+                dataManager.getDraft().clearSTL();
+                mlbTeamTable.setItems(dataManager.getDraft().getSTL().sorted(new PlayerFirstNameComparator()));
+            }
+
+            if (newValue.equals("WSH")) {
+                dataManager.getDraft().clearWSH();
+                mlbTeamTable.setItems(dataManager.getDraft().getWSH().sorted(new PlayerFirstNameComparator()));
+            }
+
+        });
+
+        //ADD IT TO MLB TEAM WORKSPACE
+        topWorkspacePaneMLB.getChildren().add(mlbTeamSelectBox);
+        topWorkspacePaneMLB.getChildren().add(mlbTeamTableBox);
+
+        //ADD IT TO ENTIRE WORKSPACE
+        workspacePane.setTop(topWorkspacePaneMLB);
+        workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
+    }
+
+    public void activateMLBTeamWorkspace() {
+        topWorkspacePaneMLB = new VBox();
+
+        topWorkspacePaneMLB.getStyleClass().add(CLASS_BORDERED_PANE);
+        MLBScreenHeadingLabel = initChildLabel(topWorkspacePaneMLB, WBDK_PropertyType.MLB_TEAM_HEADING_LABEL, CLASS_HEADING_LABEL);
+
+        topWorkspacePaneMLB.getChildren().add(mlbTeamSelectBox);
 
         workspacePane.setTop(topWorkspacePaneMLB);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
@@ -1157,7 +1323,11 @@ public class WBDK_GUI implements WBDKDataView {
             fileController.handleFantasyStandingRequest(this);
         });
         MLBTeamScreenButton.setOnAction(e -> {
-            fileController.handleMLBTeamScreenRequest(this);
+            try {
+                fileController.handleMLBTeamScreenRequest(this);
+            } catch (IOException ex) {
+                Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
 
         //DRAFT TEAM COMBOBOX LISTENERS
@@ -1194,7 +1364,7 @@ public class WBDK_GUI implements WBDKDataView {
 
             }
             All.setSelected(true);
-            
+
         });
 
         teamSelectionCombo.setCellFactory(new Callback<ListView<Team>, ListCell<Team>>() {

@@ -99,6 +99,18 @@ public class Team {
         myTeamPlayers.clear();
     }
 
+    public double getEstimatedValue() {
+        return estimatedValue.get();
+    }
+
+    public void setEstimatedValue(double initEstimatedValue) {
+        estimatedValue.set(initEstimatedValue);
+    }
+
+    public DoubleProperty estimatedValue() {
+        return estimatedValue;
+    }
+
     public String getNotes() {
         return notes.get();
     }

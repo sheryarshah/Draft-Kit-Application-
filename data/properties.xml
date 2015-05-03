@@ -51,6 +51,8 @@
 		<property name="SELECT_TEAM_LABEL"          		value="Select Fantasy Team:"></property>
 		<property name="STARTING_LINEUP_HEADING_LABEL"      value="Starting Lineup"></property>
 		<property name="TAXI_SQUAD_HEADING_LABEL"		    value="Taxi Squad"></property>
+		<property name="SELECT_MLB_TEAM_LABEL"		    	value="Select MLB Team:"></property>
+		<property name="PRO_TEAM_HEADING_LABEL"      		value="Pro Team Players"></property>
         
         <!-- ERROR MESSAGES -->
         <property name="START_DATE_AFTER_END_DATE_ERROR_MESSAGE"    value="The Starting Monday cannot be chronologically after the Ending Friday"></property>

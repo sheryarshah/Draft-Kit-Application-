@@ -219,6 +219,7 @@ public class FileController {
      * team screen interface.
      *
      * @param gui The user interface editing the Course.
+     * @throws java.io.IOException
      */
     public void handleFantasyTeamScreenRequest(WBDK_GUI gui) throws IOException {
         gui.initFantasyTeamScreenWorkspace();
@@ -240,6 +241,7 @@ public class FileController {
      * interface.
      *
      * @param gui The user interface editing the Course.
+     * @throws java.io.IOException
      */
     public void handlePlayerScreenRequest(WBDK_GUI gui) throws IOException {
 
@@ -252,8 +254,9 @@ public class FileController {
      * screen interface.
      *
      * @param gui The user interface editing the Course.
+     * @throws java.io.IOException
      */
-    public void handleMLBTeamScreenRequest(WBDK_GUI gui) {
+    public void handleMLBTeamScreenRequest(WBDK_GUI gui) throws IOException {
         gui.initMLBTeamScreenWorkspace();
     }
 

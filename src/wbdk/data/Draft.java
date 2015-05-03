@@ -25,9 +25,25 @@ public class Draft {
     ObservableList<Player> shortStop;
 
     ObservableList<Team> myTeam;
-    
+
+    ObservableList<Player> atl;
+    ObservableList<Player> az;
+    ObservableList<Player> chc;
+    ObservableList<Player> cin;
+    ObservableList<Player> col;
+    ObservableList<Player> lad;
+    ObservableList<Player> mia;
+    ObservableList<Player> mil;
+    ObservableList<Player> nym;
+    ObservableList<Player> phi;
+    ObservableList<Player> pit;
+    ObservableList<Player> sd;
+    ObservableList<Player> sf;
+    ObservableList<Player> stl;
+    ObservableList<Player> wsh;
+
     Team t = new Team();
-    
+
     String draftName;
 
     public Draft() {
@@ -44,6 +60,22 @@ public class Draft {
         shortStop = FXCollections.observableArrayList();
         myTeam = FXCollections.observableArrayList();
 
+        atl = FXCollections.observableArrayList();
+        az = FXCollections.observableArrayList();
+        chc = FXCollections.observableArrayList();
+        cin = FXCollections.observableArrayList();
+        col = FXCollections.observableArrayList();
+        lad = FXCollections.observableArrayList();
+        mia = FXCollections.observableArrayList();
+        mil = FXCollections.observableArrayList();
+        nym = FXCollections.observableArrayList();
+        phi = FXCollections.observableArrayList();
+        pit = FXCollections.observableArrayList();
+        sd = FXCollections.observableArrayList();
+        sf = FXCollections.observableArrayList();
+        stl = FXCollections.observableArrayList();
+        wsh = FXCollections.observableArrayList();
+
     }
 
     public String getDraftName() {
@@ -52,9 +84,9 @@ public class Draft {
 
     public void setDraftName(String draftName) {
         this.draftName = draftName;
-       // t.setDraftName(draftName);
+        // t.setDraftName(draftName);
     }
-    
+
     public void addTeam(Team t) {
         myTeam.add(t);
     }
@@ -86,7 +118,7 @@ public class Draft {
     public void clearPlayers() {
         players.clear();
     }
-    
+
     public void addPitcher(Player pi) {
         pitchers.add(pi);
     }
@@ -255,6 +287,261 @@ public class Draft {
             }
         }
         return shortStop;
+    }
+
+    public ObservableList<Player> getATL() {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getTeam().contains("ATL")) {
+                addATL(players.get(i));
+            }
+        }
+        return atl;
+    }
+
+    public void addATL(Player initATL) {
+        atl.add(initATL);
+    }
+
+    public void clearATL() {
+        atl.clear();
+    }
+
+    public ObservableList<Player> getAZ() {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getTeam().contains("AZ")) {
+                addAZ(players.get(i));
+            }
+        }
+        return az;
+    }
+
+    public void addAZ(Player initAZ) {
+        az.add(initAZ);
+    }
+
+    public void clearAZ() {
+        az.clear();
+    }
+
+    public ObservableList<Player> getCHC() {
+        for (Player player : players) {
+            if (player.getTeam().contains("CHC")) {
+                addCHC(player);
+            }
+        }
+        return chc;
+    }
+
+    public void addCHC(Player initCHC) {
+        chc.add(initCHC);
+    }
+
+    public void clearCHC() {
+        chc.clear();
+    }
+
+    public ObservableList<Player> getCIN() {
+        for (Player player : players) {
+            if (player.getTeam().contains("CIN")) {
+                addCIN(player);
+            }
+        }
+        return cin;
+    }
+
+    public void addCIN(Player initCIN) {
+        cin.add(initCIN);
+    }
+
+    public void clearCIN() {
+        cin.clear();
+    }
+
+    public ObservableList<Player> getCOL() {
+        for (Player player : players) {
+            if (player.getTeam().contains("COL")) {
+                addCOL(player);
+            }
+        }
+        return col;
+    }
+
+    public void addCOL(Player initCOL) {
+        col.add(initCOL);
+    }
+
+    public void clearCOL() {
+        col.clear();
+    }
+
+    public ObservableList<Player> getLAD() {
+        for (Player player : players) {
+            if (player.getTeam().contains("LAD")) {
+                addLAD(player);
+            }
+        }
+        return lad;
+    }
+
+    public void addLAD(Player initLAD) {
+        lad.add(initLAD);
+    }
+
+    public void clearLAD() {
+        lad.clear();
+    }
+
+    public ObservableList<Player> getMIA() {
+        for (Player player : players) {
+            if (player.getTeam().contains("MIA")) {
+                addMIA(player);
+            }
+        }
+        return mia;
+    }
+
+    public void addMIA(Player initMIA) {
+        mia.add(initMIA);
+    }
+
+    public void clearMIA() {
+        mia.clear();
+    }
+
+    public ObservableList<Player> getMIL() {
+        for (Player player : players) {
+            if (player.getTeam().contains("MIL")) {
+                addMIL(player);
+            }
+        }
+        return mil;
+    }
+
+    public void addMIL(Player initMIL) {
+        mil.add(initMIL);
+    }
+
+    public void clearMIL() {
+        mil.clear();
+    }
+
+    public ObservableList<Player> getNYM() {
+        for (Player player : players) {
+            if (player.getTeam().contains("NYM")) {
+                addNYM(player);
+            }
+        }
+        return nym;
+    }
+
+    public void addNYM(Player initNYM) {
+        nym.add(initNYM);
+    }
+
+    public void clearNYM() {
+        nym.clear();
+    }
+
+    public ObservableList<Player> getPHI() {
+        for (Player player : players) {
+            if (player.getTeam().contains("PHI")) {
+                addPHI(player);
+            }
+        }
+        return phi;
+    }
+
+    public void addPHI(Player initPHI) {
+        phi.add(initPHI);
+    }
+
+    public void clearPHI() {
+        phi.clear();
+    }
+
+    public ObservableList<Player> getPIT() {
+        for (Player player : players) {
+            if (player.getTeam().contains("PIT")) {
+                addPIT(player);
+            }
+        }
+        return pit;
+    }
+
+    public void addPIT(Player initPIT) {
+        pit.add(initPIT);
+    }
+
+    public void clearPIT() {
+        pit.clear();
+    }
+
+    public ObservableList<Player> getSD() {
+        for (Player player : players) {
+            if (player.getTeam().contains("SD")) {
+                addSD(player);
+            }
+        }
+        return sd;
+    }
+
+    public void addSD(Player initSD) {
+        sd.add(initSD);
+    }
+
+    public void clearSD() {
+        sd.clear();
+    }
+
+    public ObservableList<Player> getSF() {
+        for (Player player : players) {
+            if (player.getTeam().contains("SF")) {
+                addSF(player);
+            }
+        }
+        return sf;
+    }
+
+    public void addSF(Player initSF) {
+        sf.add(initSF);
+    }
+
+    public void clearSF() {
+        sf.clear();
+    }
+
+    public ObservableList<Player> getSTL() {
+        for (Player player : players) {
+            if (player.getTeam().contains("STL")) {
+                addSTL(player);
+            }
+        }
+        return stl;
+    }
+
+    public void addSTL(Player initSTL) {
+        stl.add(initSTL);
+    }
+
+    public void clearSTL() {
+        stl.clear();
+    }
+
+    public ObservableList<Player> getWSH() {
+        for (Player player : players) {
+            if (player.getTeam().contains("WSH")) {
+                addWSH(player);
+            }
+        }
+        return wsh;
+    }
+
+    public void addWSH(Player initWSH) {
+        wsh.add(initWSH);
+    }
+
+    public void clearWSH() {
+        wsh.clear();
     }
 
 }

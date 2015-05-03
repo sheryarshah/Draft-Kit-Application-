@@ -78,6 +78,18 @@ public class Player {
     public StringProperty teamProperty() {
         return team;
     }
+    
+    public double getEstimatedValue(){
+        return estimatedValue.get();
+    }
+    
+    public void setEstimatedValue(double initEstimatedValue){
+        estimatedValue.set(initEstimatedValue);
+    }
+    
+    public DoubleProperty estimatedValue(){
+        return estimatedValue;
+    }
 
     public String getLastName() {
         return lastName.get();
