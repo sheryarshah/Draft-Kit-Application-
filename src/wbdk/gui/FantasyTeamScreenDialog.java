@@ -30,6 +30,8 @@ import wbdk.data.Draft;
 import wbdk.data.Player;
 import wbdk.data.Team;
 import wbdk.data.WBDKDataManager;
+import static wbdk.gui.PlayerScreenDialog.CANCEL;
+import static wbdk.gui.PlayerScreenDialog.COMPLETE;
 import static wbdk.gui.PlayerScreenDialog.EDIT_PLAYER_TITLE;
 import static wbdk.gui.PlayerScreenDialog.PLAYER_HEADING;
 import static wbdk.gui.WBDK_GUI.CLASS_HEADING_LABEL;
@@ -549,6 +551,34 @@ public class FantasyTeamScreenDialog extends Stage {
             int salary = Integer.parseInt(s);
             t.setSalary(salary);
         });
+        
+         // AND FINALLY, THE BUTTONS
+        completeButton = new Button(COMPLETE);
+        cancelButton = new Button(CANCEL);
+
+        // REGISTER EVENT HANDLERS FOR OUR BUTTONS
+        EventHandler completeHandler = (EventHandler<ActionEvent>) (ActionEvent ae) -> {
+
+            if (!salaryTextField.getText().equalsIgnoreCase("") && contractComboBox.getSelectionModel().getSelectedItem() != "X") {
+                Button sourceButton = (Button) ae.getSource();
+                selection = sourceButton.getText();
+                hide();
+            } else {
+                System.out.println(selection);
+                messageDialog.show("Incomplete Fields");
+            }
+
+        };
+
+        // REGISTER EVENT HANDLERS FOR OUR BUTTONS
+        EventHandler cancelHandler = (EventHandler<ActionEvent>) (ActionEvent ae) -> {
+            Button sourceButton = (Button) ae.getSource();
+            selection = sourceButton.getText();
+            hide();
+        };
+
+        completeButton.setOnAction(completeHandler);
+        cancelButton.setOnAction(cancelHandler);
 
         //gridPane.add(iv2, columnIndex, rowIndex, colspan, rowspan);
         editGridPane.add(headingLabel, 0, 0, 2, 1);

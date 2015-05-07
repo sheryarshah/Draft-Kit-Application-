@@ -53,7 +53,8 @@ import static wbdk.WBDK_StartupConstants.PATH_IMAGES;
 import wbdk.controller.DraftEditController;
 import wbdk.controller.FantasyTeamScreenEditController;
 import wbdk.controller.FileController;
-import wbdk.controller.PlayerFirstNameComparator;
+import wbdk.controller.PlayerLastNameComparator;
+import wbdk.controller.PlayerLastNameComparator;
 import wbdk.controller.PlayerScreenEditController;
 import wbdk.data.Draft;
 import wbdk.data.Player;
@@ -314,12 +315,11 @@ public class WBDK_GUI implements WBDKDataView {
     //TABLE COLUMNS CONSTANTS FOR FANTASY TEAM
     static final String COL_POS = "Position";
     static final String COL_CONTRACT = "Contract";
-    static final String COL_SALARY = "Salary";
+    static final String COL_SALARY = "Salary ($)";
 
     //BELOW IS THE STUFF FOR MLB TEAM SCREEN
     VBox mlbTeamBox;
     HBox mlbTeamSelectBox;
-    ;
     VBox mlbTeamTableBox;
     Label proTeamPlayerLabel;
 
@@ -333,6 +333,68 @@ public class WBDK_GUI implements WBDKDataView {
     TableColumn firstName2;
     TableColumn lastName2;
     TableColumn qualifyingPosition;
+
+    //BELOW IS THE STUFF FOR FANTASY STANDINGS SCREEN
+    VBox fantasyStandingBox;
+    VBox fantasyStandingTableBox;
+
+    //TABLE FOR FANTASY TEAM TAXI SQUAD
+    TableView<Team> fantasyStandingTable;
+    TableColumn teamName;
+    TableColumn playersNeeded;
+    TableColumn salaryLeft;
+    TableColumn salaryPP;
+    TableColumn r;
+    TableColumn hr;
+    TableColumn rbi;
+    TableColumn sb;
+    TableColumn ba;
+    TableColumn w;
+    TableColumn sv;
+    TableColumn k;
+    TableColumn era;
+    TableColumn whip;
+    TableColumn totalPoint;
+    
+    //TABLE COLUMNS CONSTANTS FOR FANTASY STANDING
+    static final String COL_TEAM = "Team";
+    static final String COL_PLAYER_NEEDED = "Players Needed";
+    static final String COL_SALARY_LEFT = "$ Left";
+    static final String COL_SALARY_PP = "$ PP";
+    static final String COL_R = "R";
+    static final String COL_HR = "HR";
+    static final String COL_RBI = "RBI";
+    static final String COL_SB = "SB";
+    static final String COL_BA = "BA";
+    static final String COL_W = "W";
+    static final String COL_SV = "SV";
+    static final String COL_K = "K";
+    static final String COL_ERA = "ERA";
+    static final String COL_WHIP = "WHIP";
+    static final String COL_TOTAL_POINT = "Total Points";
+    
+    //BELOW IS THE STUFF FOR DRAFT SCREEN
+    VBox draftBox;
+    HBox draftToolbarBox;
+    VBox draftTableBox;
+    
+    FlowPane draftButtonPane;
+    
+    Button selectPlayerButton;
+    Button autoDraftButton;
+    Button pauseDraftButton;
+    
+    //TABLE FOR FANTASY TEAM TAXI SQUAD
+    TableView<Team> draftTable;
+    TableColumn pick;
+    TableColumn first;
+    TableColumn last;
+    TableColumn fantasyTeamName;
+    TableColumn contractDraft;
+    TableColumn salaryDraft;
+    
+    static final String COL_PICK = "Pick#";
+
 
     /**
      * Constructor for making this GUI, note that it does not initialize the UI
@@ -601,8 +663,11 @@ public class WBDK_GUI implements WBDKDataView {
     }
 
     private void initAllScreens() throws IOException {
+        initMLBTeamScreenWorkspace();
         initPlayerScreenWorkspace();
         fantasyTeamScreenWork();
+        fantasyStandingSceen();
+        draftScreen();
     }
 
     // INITIALIZES THE TOP PORTION OF THE FANTASY TEAM SCREEN WORKSPACE
@@ -627,6 +692,7 @@ public class WBDK_GUI implements WBDKDataView {
         draft.setDraftName(draftNameTextField.getText());
         trackSelect = teamSelectionCombo.getSelectionModel().getSelectedIndex();
         fantasyTeamTable.setItems(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers());
+        taxiTeamTable.setItems(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers());
 
     }
 
@@ -677,7 +743,7 @@ public class WBDK_GUI implements WBDKDataView {
         salary = new TableColumn(COL_SALARY);
 
         //MAKE FANTASY TABLE EDITABLE
-        fantasyTeamTable.setEditable(true);
+        fantasyTeamTable.setEditable(false);
 
         //START ADDING THE COLUMNS
         fantasyTeamTable.getColumns().add(positionSelected);
@@ -699,7 +765,7 @@ public class WBDK_GUI implements WBDKDataView {
         firstName.setCellValueFactory(new PropertyValueFactory<>("firstName"));
         lastName.setCellValueFactory(new PropertyValueFactory<>("lastName"));
         proTeam.setCellValueFactory(new PropertyValueFactory<>("proTeam"));
-        q_p.setCellValueFactory(new PropertyValueFactory<>("q_p"));
+        q_p.setCellValueFactory(new PropertyValueFactory<>("qp3"));
         r_w.setCellValueFactory(new PropertyValueFactory<>("RW"));
         hr_sv.setCellValueFactory(new PropertyValueFactory<>("HR_SV"));
         rbi_k.setCellValueFactory(new PropertyValueFactory<>("RBIK"));
@@ -714,6 +780,7 @@ public class WBDK_GUI implements WBDKDataView {
 
         fantasyTeamTable.setPrefHeight(350);
 
+        //BELOW IS THE TABLE STUFF FOR TAXI SQUAD
         taxiTeamTableBox = new VBox();
 
         taxiSquadLabel = initLabel(WBDK_PropertyType.TAXI_SQUAD_HEADING_LABEL, CLASS_SUBHEADING_LABEL);
@@ -751,6 +818,20 @@ public class WBDK_GUI implements WBDKDataView {
         taxiTeamTable.getColumns().add(estimated1);
         taxiTeamTable.getColumns().add(contract1);
         taxiTeamTable.getColumns().add(salary1);
+
+        // AND LINK THE COLUMNS TO THE DATA
+        positionSelected1.setCellValueFactory(new PropertyValueFactory<>("positionPlaying"));
+        firstName1.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        lastName1.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        proTeam1.setCellValueFactory(new PropertyValueFactory<>("proTeam"));
+        q_p1.setCellValueFactory(new PropertyValueFactory<>("qp3"));
+        r_w1.setCellValueFactory(new PropertyValueFactory<>("RW"));
+        hr_sv1.setCellValueFactory(new PropertyValueFactory<>("HR_SV"));
+        rbi_k1.setCellValueFactory(new PropertyValueFactory<>("RBIK"));
+        sb_era1.setCellValueFactory(new PropertyValueFactory<>("SBERA"));
+        ba_whip1.setCellValueFactory(new PropertyValueFactory<>("BAWHIP"));
+        contract1.setCellValueFactory(new PropertyValueFactory<>("contract"));
+        salary1.setCellValueFactory(new PropertyValueFactory<>("salary"));
 
         taxiTeamTableBox.getChildren().add(taxiSquadLabel);
         taxiTeamTableBox.setSpacing(10);
@@ -799,8 +880,51 @@ public class WBDK_GUI implements WBDKDataView {
         topWorkspacePaneDraft.getStyleClass().add(CLASS_BORDERED_PANE);
         draftScreenHeadingLabel = initChildLabel(topWorkspacePaneDraft, WBDK_PropertyType.DRAFT_HEADING_LABEL, CLASS_HEADING_LABEL);
 
+        topWorkspacePaneDraft.getChildren().add(draftBox);
+        
         workspacePane.setTop(topWorkspacePaneDraft);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
+
+    }
+    
+    public void draftScreen(){
+        draftBox = new VBox();
+        draftToolbarBox = new HBox();
+        
+        draftButtonPane = new FlowPane();
+        selectPlayerButton = initChildButton(draftButtonPane, WBDK_PropertyType.SELECT_PLAYER_ICON, WBDK_PropertyType.SELECT_PLAYER_TOOLTIP, false);
+        autoDraftButton = initChildButton(draftButtonPane, WBDK_PropertyType.AUTO_DRAFT_ICON, WBDK_PropertyType.AUTO_DRAFT_TOOLTIP, activateButton);
+        pauseDraftButton = initChildButton(draftButtonPane, WBDK_PropertyType.PAUSE_DRAFT_ICON, WBDK_PropertyType.PAUSE_DRAFT_TOOLTIP, activateButton);
+        
+        draftToolbarBox.getChildren().add(draftButtonPane);
+        
+        draftTableBox = new VBox();
+        
+        draftTable = new TableView();
+        
+        //NOW SETUP THE TABLE COLUMNS
+        pick = new TableColumn(COL_PICK);
+        first = new TableColumn(COL_FIRST);
+        last = new TableColumn(COL_LAST);
+        fantasyTeamName = new TableColumn(COL_PRO_TEAM);
+        contractDraft = new TableColumn(COL_CONTRACT);
+        salaryDraft = new TableColumn(COL_SALARY);
+        
+        //START ADDING THE COLUMNS
+        draftTable.getColumns().add(pick);
+        draftTable.getColumns().add(first);
+        draftTable.getColumns().add(last);
+        draftTable.getColumns().add(fantasyTeamName);
+        draftTable.getColumns().add(contractDraft);
+        draftTable.getColumns().add(salaryDraft);
+        
+        
+        draftTable.setPrefHeight(600);
+        
+        draftTableBox.getChildren().add(draftTable);
+        
+        draftBox.getChildren().add(draftToolbarBox);
+        draftBox.getChildren().add(draftTableBox);
 
     }
 
@@ -1113,10 +1237,91 @@ public class WBDK_GUI implements WBDKDataView {
     // INITIALIZES THE FANTASY STANDING WORKWPACE UI
     public void initFantasyStandingScreenWorkspace() {
         topWorkspacePaneFantasyStanding = new VBox();
+
         topWorkspacePaneFantasyStanding.getStyleClass().add(CLASS_BORDERED_PANE);
         fantasyStandingScreenHeadingLabel = initChildLabel(topWorkspacePaneFantasyStanding, WBDK_PropertyType.FANTASY_STANDING_HEADING_LABEL, CLASS_HEADING_LABEL);
+
+        topWorkspacePaneFantasyStanding.getChildren().add(fantasyStandingTableBox);
+
         workspacePane.setTop(topWorkspacePaneFantasyStanding);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
+
+    }
+
+    public void fantasyStandingSceen() {
+
+        dataManager.getDraft().clearTeam1();
+
+        fantasyStandingBox = new VBox();
+
+        fantasyStandingTableBox = new VBox();
+
+        fantasyStandingTable = new TableView();
+
+        //NOW SETUP THE TABLE COLUMNS
+        teamName = new TableColumn(COL_TEAM);
+        playersNeeded = new TableColumn(COL_PLAYER_NEEDED);
+        salaryLeft = new TableColumn(COL_SALARY_LEFT);
+        salaryPP = new TableColumn(COL_SALARY_PP);
+        r = new TableColumn(COL_R);
+        hr = new TableColumn(COL_HR);
+        rbi = new TableColumn(COL_RBI);
+        sb = new TableColumn(COL_SB);
+        ba = new TableColumn(COL_BA);
+        w = new TableColumn(COL_W);
+        sv = new TableColumn(COL_SV);
+        k = new TableColumn(COL_K);
+        era = new TableColumn(COL_ERA);
+        whip = new TableColumn(COL_WHIP);
+        totalPoint = new TableColumn(COL_TOTAL_POINT);
+
+        playersNeeded.setPrefWidth(50);
+        //MAKE FANTASY STANDING TABLE EDITABLE
+        fantasyStandingTable.setEditable(true);
+
+        //START ADDING THE COLUMNS
+        fantasyStandingTable.getColumns().add(teamName);
+        fantasyStandingTable.getColumns().add(playersNeeded);
+        fantasyStandingTable.getColumns().add(salaryLeft);
+        fantasyStandingTable.getColumns().add(salaryPP);
+        fantasyStandingTable.getColumns().add(r);
+        fantasyStandingTable.getColumns().add(hr);
+        fantasyStandingTable.getColumns().add(rbi);
+        fantasyStandingTable.getColumns().add(sb);
+        fantasyStandingTable.getColumns().add(ba);
+        fantasyStandingTable.getColumns().add(w);
+        fantasyStandingTable.getColumns().add(sv);
+        fantasyStandingTable.getColumns().add(k);
+        fantasyStandingTable.getColumns().add(era);
+        fantasyStandingTable.getColumns().add(whip);
+        fantasyStandingTable.getColumns().add(totalPoint);
+
+        // AND LINK THE COLUMNS TO THE DATA
+        teamName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        playersNeeded.setCellValueFactory(new PropertyValueFactory<>("playerSize"));
+        salaryLeft.setCellValueFactory(new PropertyValueFactory<>("salaryLeft"));
+        salaryPP.setCellValueFactory(new PropertyValueFactory<>("salaryPP"));
+        r.setCellValueFactory(new PropertyValueFactory<>("R"));
+        hr.setCellValueFactory(new PropertyValueFactory<>("HR"));
+        rbi.setCellValueFactory(new PropertyValueFactory<>("RBI"));
+        sb.setCellValueFactory(new PropertyValueFactory<>("SB"));
+        ba.setCellValueFactory(new PropertyValueFactory<>("BA"));
+        w.setCellValueFactory(new PropertyValueFactory<>("W"));
+        sv.setCellValueFactory(new PropertyValueFactory<>("SV"));
+        k.setCellValueFactory(new PropertyValueFactory<>("K"));
+        era.setCellValueFactory(new PropertyValueFactory<>("ERA"));
+        whip.setCellValueFactory(new PropertyValueFactory<>("WHIP"));
+        totalPoint.setCellValueFactory(new PropertyValueFactory<>("totalPoints"));
+
+        fantasyStandingTableBox.getChildren().add(fantasyStandingTable);
+
+        fantasyStandingTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        fantasyStandingTable.setPrefHeight(600);
+
+        fantasyStandingTable.getItems().clear();
+        
+        fantasyStandingTable.setItems(dataManager.getDraft().getTeam1());
 
     }
 
@@ -1136,11 +1341,11 @@ public class WBDK_GUI implements WBDKDataView {
 
         mlbTeamSelectBox.getChildren().add(selectProTeamPane);
 
-        ObservableList<String> proTeam = FXCollections.observableArrayList();
-        proTeam.addAll("ATL", "AZ", "CHC", "CIN", "LAD", "MIA", "MIL", "PHI", "PIT",
+        ObservableList<String> proTeam2 = FXCollections.observableArrayList();
+        proTeam2.addAll("ATL", "AZ", "CHC", "CIN", "LAD", "MIA", "MIL", "PHI", "PIT",
                 "SD", "SF", "STL", "WSH");
-        proTeamCombo.getItems().addAll(proTeam);
-        proTeamCombo.setValue(proTeam.get(0));
+        proTeamCombo.getItems().addAll(proTeam2);
+        proTeamCombo.setValue(proTeam2.get(0));
         proTeamCombo.setVisibleRowCount(3);
 
         mlbTeamTableBox = new VBox();
@@ -1153,7 +1358,7 @@ public class WBDK_GUI implements WBDKDataView {
         qualifyingPosition = new TableColumn(COL_POSITIONS);
 
         //MAKE MLB TEAM TABLE EDITABLE
-        mlbTeamTable.setEditable(true);
+        mlbTeamTable.setEditable(false);
 
         //START ADDING THE COLUMNS
         mlbTeamTable.getColumns().add(firstName2);
@@ -1170,82 +1375,82 @@ public class WBDK_GUI implements WBDKDataView {
         qualifyingPosition.setCellValueFactory(new PropertyValueFactory<>("qp"));
 
         dataManager.getDraft().clearATL();
-        mlbTeamTable.setItems(dataManager.getDraft().getATL().sorted(new PlayerFirstNameComparator()));
+        mlbTeamTable.setItems(dataManager.getDraft().getATL().sorted(new PlayerLastNameComparator()));
         proTeamCombo.valueProperty().addListener((observable, oldValue, newValue) -> {
 
             if (newValue.equals("ATL")) {
                 dataManager.getDraft().clearATL();
-                mlbTeamTable.setItems(dataManager.getDraft().getATL().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getATL().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("AZ")) {
                 dataManager.getDraft().clearAZ();
-                mlbTeamTable.setItems(dataManager.getDraft().getAZ().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getAZ().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("CHC")) {
                 dataManager.getDraft().clearCHC();
-                mlbTeamTable.setItems(dataManager.getDraft().getCHC().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getCHC().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("CIN")) {
                 dataManager.getDraft().clearCIN();
-                mlbTeamTable.setItems(dataManager.getDraft().getCIN().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getCIN().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("COL")) {
                 dataManager.getDraft().clearCOL();
-                mlbTeamTable.setItems(dataManager.getDraft().getCOL().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getCOL().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("LAD")) {
                 dataManager.getDraft().clearLAD();
-                mlbTeamTable.setItems(dataManager.getDraft().getLAD().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getLAD().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("MIA")) {
                 dataManager.getDraft().clearMIA();
-                mlbTeamTable.setItems(dataManager.getDraft().getMIA().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getMIA().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("MIL")) {
                 dataManager.getDraft().clearMIL();
-                mlbTeamTable.setItems(dataManager.getDraft().getMIL().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getMIL().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("NYM")) {
                 dataManager.getDraft().clearNYM();
-                mlbTeamTable.setItems(dataManager.getDraft().getNYM().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getNYM().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("PHI")) {
                 dataManager.getDraft().clearPHI();
-                mlbTeamTable.setItems(dataManager.getDraft().getPHI().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getPHI().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("PIT")) {
                 dataManager.getDraft().clearPIT();
-                mlbTeamTable.setItems(dataManager.getDraft().getPIT().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getPIT().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("SD")) {
                 dataManager.getDraft().clearSD();
-                mlbTeamTable.setItems(dataManager.getDraft().getSD().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getSD().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("SF")) {
                 dataManager.getDraft().clearSF();
-                mlbTeamTable.setItems(dataManager.getDraft().getSF().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getSF().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("STL")) {
                 dataManager.getDraft().clearSTL();
-                mlbTeamTable.setItems(dataManager.getDraft().getSTL().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getSTL().sorted(new PlayerLastNameComparator()));
             }
 
             if (newValue.equals("WSH")) {
                 dataManager.getDraft().clearWSH();
-                mlbTeamTable.setItems(dataManager.getDraft().getWSH().sorted(new PlayerFirstNameComparator()));
+                mlbTeamTable.setItems(dataManager.getDraft().getWSH().sorted(new PlayerLastNameComparator()));
             }
 
         });
@@ -1260,12 +1465,6 @@ public class WBDK_GUI implements WBDKDataView {
     }
 
     public void activateMLBTeamWorkspace() {
-        topWorkspacePaneMLB = new VBox();
-
-        topWorkspacePaneMLB.getStyleClass().add(CLASS_BORDERED_PANE);
-        MLBScreenHeadingLabel = initChildLabel(topWorkspacePaneMLB, WBDK_PropertyType.MLB_TEAM_HEADING_LABEL, CLASS_HEADING_LABEL);
-
-        topWorkspacePaneMLB.getChildren().add(mlbTeamSelectBox);
 
         workspacePane.setTop(topWorkspacePaneMLB);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);

@@ -40,6 +40,9 @@ public class Player {
     final DoubleProperty estimatedValue;
     final StringProperty nation;
 
+   // final IntegerProperty R;
+//    final IntegerProperty HR;
+
     public Player() {
 
         //DEFAULTS VALUE IS N/A AND -1
@@ -65,6 +68,9 @@ public class Player {
         SBERA = new SimpleDoubleProperty(-1.0);
         BAWHIP = new SimpleDoubleProperty(-1.0);
 
+      //  R = new SimpleIntegerProperty(-1);
+      //  HR = new SimpleIntegerProperty(-1);
+
     }
 
     public String getTeam() {
@@ -78,16 +84,16 @@ public class Player {
     public StringProperty teamProperty() {
         return team;
     }
-    
-    public double getEstimatedValue(){
+
+    public double getEstimatedValue() {
         return estimatedValue.get();
     }
-    
-    public void setEstimatedValue(double initEstimatedValue){
+
+    public void setEstimatedValue(double initEstimatedValue) {
         estimatedValue.set(initEstimatedValue);
     }
-    
-    public DoubleProperty estimatedValue(){
+
+    public DoubleProperty estimatedValue() {
         return estimatedValue;
     }
 
@@ -287,4 +293,28 @@ public class Player {
         return BAWHIP;
     }
 
+ /*   public int getR() {
+        return R.get();
+    }
+
+    public void setR(int initR) {
+        R.set(initR);
+    }
+
+    public IntegerProperty rProperty() {
+        return R;
+    }
+
+    public int getHR() {
+        return HR.get();
+    }
+
+    public void setHR(int initHR) {
+        HR.set(initHR);
+    }
+
+    public IntegerProperty hrProperty() {
+        return HR;
+    }
+*/
 }

@@ -25,6 +25,7 @@ public class Draft {
     ObservableList<Player> shortStop;
 
     ObservableList<Team> myTeam;
+    ObservableList<Team> myTeam1;
 
     ObservableList<Player> atl;
     ObservableList<Player> az;
@@ -42,8 +43,6 @@ public class Draft {
     ObservableList<Player> stl;
     ObservableList<Player> wsh;
 
-    Team t = new Team();
-
     String draftName;
 
     public Draft() {
@@ -59,6 +58,8 @@ public class Draft {
         outFielder = FXCollections.observableArrayList();
         shortStop = FXCollections.observableArrayList();
         myTeam = FXCollections.observableArrayList();
+
+        myTeam1 = FXCollections.observableArrayList();
 
         atl = FXCollections.observableArrayList();
         az = FXCollections.observableArrayList();
@@ -542,6 +543,80 @@ public class Draft {
 
     public void clearWSH() {
         wsh.clear();
+    }
+
+    public void addTeam1(Team t1) {
+        myTeam1.add(t1);
+    }
+
+    public ObservableList<Team> getTeam1() {
+
+        for (int i = 0; i < getTeam().size(); i++) {
+            int hrCounter = 0;
+            int rCounter = 0;
+            int rbiCounter = 0;
+            double sbCounter = 0;
+            double baCounter = 0;
+            int wCounter = 0;
+            int svCounter = 0;
+            int kCounter = 0;
+            double eraCounter = 0;
+            double whipCounter = 0;
+            int playerSize = 23;
+            int salaryLeft = 260;
+            double salaryPP;
+
+            playerSize -= getTeam().get(i).getTeamPlayers().size();
+
+            Team t = new Team();
+            t.setName(getTeam().get(i).getName());
+            t.setPlayerSize(playerSize);
+            t.setSalaryLeft(salaryLeft);
+
+            for (int j = 0; j < getTeam().get(i).getTeamPlayers().size(); j++) {
+                salaryLeft -= getTeam().get(i).getTeamPlayers().get(j).getSalary();
+                salaryPP = salaryLeft / playerSize;
+                if (!getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
+                    rCounter += getTeam().get(i).getTeamPlayers().get(j).getRW();
+                    hrCounter += getTeam().get(i).getTeamPlayers().get(j).getHR_SV();
+                    rbiCounter += getTeam().get(i).getTeamPlayers().get(j).getRBIK();
+                    sbCounter += getTeam().get(i).getTeamPlayers().get(j).getSBERA();
+                    baCounter += getTeam().get(i).getTeamPlayers().get(j).getBAWHIP();
+                }
+                else{
+                    wCounter += getTeam().get(i).getTeamPlayers().get(j).getRW();
+                    svCounter += getTeam().get(i).getTeamPlayers().get(j).getHR_SV();
+                    kCounter += getTeam().get(i).getTeamPlayers().get(j).getRBIK();
+                    eraCounter += getTeam().get(i).getTeamPlayers().get(j).getSBERA();
+                    whipCounter += getTeam().get(i).getTeamPlayers().get(j).getBAWHIP();
+                }
+
+                t.setSalaryLeft(salaryLeft);
+                t.setSalaryPP(salaryPP);
+                t.setR(rCounter);
+                t.setHR(hrCounter);
+                t.setRBI(rbiCounter);
+                t.setSB(sbCounter);
+                t.setBA(baCounter);
+                t.setW(wCounter);
+                t.setSV(svCounter);
+                t.setK(kCounter);
+                t.setERA(eraCounter);
+                t.setWHIP(whipCounter);
+
+            }
+            addTeam1(t);
+        }
+
+        return myTeam1;
+    }
+
+    public void removeTeam1(Team teamToRemove1) {
+        myTeam1.remove(teamToRemove1);
+    }
+
+    public void clearTeam1() {
+        myTeam1.clear();
     }
 
 }

@@ -212,6 +212,7 @@ public class FileController {
      */
     public void handleDraftScreenRequest(WBDK_GUI gui) {
         gui.initDraftScreenWorkspace();
+        gui.draftScreen();
     }
 
     /**
@@ -234,6 +235,7 @@ public class FileController {
      */
     public void handleFantasyStandingRequest(WBDK_GUI gui) {
         gui.initFantasyStandingScreenWorkspace();
+        gui.fantasyStandingSceen();
     }
 
     /**
@@ -258,6 +260,7 @@ public class FileController {
      */
     public void handleMLBTeamScreenRequest(WBDK_GUI gui) throws IOException {
         gui.initMLBTeamScreenWorkspace();
+        gui.activateMLBTeamWorkspace();
     }
 
     /**

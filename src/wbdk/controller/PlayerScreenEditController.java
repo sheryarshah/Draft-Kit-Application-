@@ -32,17 +32,19 @@ public class PlayerScreenEditController {
     MessageDialog messageDialog;
     YesNoCancelDialog yesNoCancelDialog;
 
-    Team t;
+    Team t = new Team();
 
     int trackSelect;
-    
+    int counter = 0;
+    int hr;
+
     // WE WANT TO KEEP TRACK OF WHEN SOMETHING HAS NOT BEEN SAVED
     private boolean saved;
 
     public PlayerScreenEditController() {
 
     }
-    
+
     public PlayerScreenEditController(Stage initPrimaryStage, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog) {
         psd = new PlayerScreenDialog(initPrimaryStage, initMessageDialog);
         messageDialog = initMessageDialog;
@@ -57,7 +59,7 @@ public class PlayerScreenEditController {
 
         // DID THE USER CONFIRM?
         if (psd.wasCompleteSelected()) {
-            
+
             // GET THE LECTURE
             Player p = psd.getPlayer();
 
@@ -75,8 +77,8 @@ public class PlayerScreenEditController {
     public void setTrackSelect(int trackSelect) {
         this.trackSelect = trackSelect;
     }
-    
-    public int getTrackSelect(){
+
+    public int getTrackSelect() {
         return trackSelect;
     }
 
@@ -84,16 +86,25 @@ public class PlayerScreenEditController {
     public void handleEditPlayerRequest(WBDK_GUI gui, Player playerToEdit, WBDKDataManager dataManager, int select) throws IOException {
         WBDKDataManager pdm = gui.getDataManager();
         psd.showEditPlayerDialog(playerToEdit, dataManager);
-        
+
         // DID THE USER CONFIRM?
         if (psd.wasCompleteSelected()) {
-            dataManager.getDraft().getTeam().get(psd.getI()).addTeamPlayers(psd.getTeam());
-            dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().sort(new TeamPlayerComparator());
-            dataManager.getDraft().removePlayer(playerToEdit);
+            counter++;
+            if (counter > 23) {
+                dataManager.getDraft().getTeam().get(psd.getI()).addTaxiPlayers(psd.getTeam());
+                dataManager.getDraft().getTeam().get(psd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
+                dataManager.getDraft().removePlayer(playerToEdit);
+
+            } else {
+                dataManager.getDraft().getTeam().get(psd.getI()).addTeamPlayers(psd.getTeam());
+                dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().sort(new TeamPlayerComparator());
+                dataManager.getDraft().removePlayer(playerToEdit);
+            }
+
             //update toolbar
             gui.updateToolbarControls(saved);
         } else {
-            psd.removeTeamPlyer(dataManager);            
+            psd.removeTeamPlyer(dataManager);
         }
     }
 

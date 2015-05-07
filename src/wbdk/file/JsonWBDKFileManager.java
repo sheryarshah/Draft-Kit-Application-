@@ -105,8 +105,10 @@ public class JsonWBDKFileManager implements WBDKFileManager {
             hitters.setFirstName(jso.getString(JSON_FIRST_NAME));
             hitters.setQp(jso.getString(JSON_QP).concat("_U"));
             hitters.setAb(Integer.valueOf(jso.getString(JSON_AB)));
+           // hitters.setR(Integer.valueOf(jso.getString(JSON_R)));
             hitters.setRW(Integer.valueOf(jso.getString(JSON_R)));
             hitters.setH(Integer.valueOf(jso.getString(JSON_H)));
+         //   hitters.setHR(Integer.valueOf(jso.getString(JSON_HR)));
             hitters.setHRSV(Integer.valueOf(jso.getString(JSON_HR)));
             hitters.setRBIK(Integer.valueOf(jso.getString(JSON_RBI)));
             hitters.setSBERA(Double.parseDouble(jso.getString(JSON_SB)));

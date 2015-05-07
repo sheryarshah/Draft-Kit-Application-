@@ -36,6 +36,8 @@ public class FantasyTeamScreenEditController {
     // WE WANT TO KEEP TRACK OF WHEN SOMETHING HAS NOT BEEN SAVED
     private boolean saved;
 
+    int counter = 0;
+
     public FantasyTeamScreenEditController(Stage initPrimaryStage, MessageDialog initMessageDialog, YesNoCancelDialog initYesNoCancelDialog) {
         ftsd = new FantasyTeamScreenDialog(initPrimaryStage, initMessageDialog);
         messageDialog = initMessageDialog;
@@ -143,9 +145,19 @@ public class FantasyTeamScreenEditController {
 
         // DID THE USER CONFIRM?
         if (ftsd.wasCompleteSelected()) {
-            dataManager.getDraft().getTeam().get(ftsd.getI()).addTeamPlayers(ftsd.getAccessPlayer());
-            dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().sort(new TeamPlayerComparator());
-            dataManager.getDraft().getTeam().get(trackSelect).removeTeamPlayers(playerToEdit);
+            counter = dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().size();
+            System.out.println("fantasy = "+counter);
+            if (counter > 23) {
+                dataManager.getDraft().getTeam().get(ftsd.getI()).addTaxiPlayers(ftsd.getAccessPlayer());
+                dataManager.getDraft().getTeam().get(ftsd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
+                dataManager.getDraft().getTeam().get(trackSelect).removeTeamPlayers(playerToEdit);
+
+            } else {
+                dataManager.getDraft().getTeam().get(ftsd.getI()).addTeamPlayers(ftsd.getAccessPlayer());
+                dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().sort(new TeamPlayerComparator());
+                dataManager.getDraft().getTeam().get(trackSelect).removeTeamPlayers(playerToEdit);
+            }
+
             //update toolbar
             gui.updateToolbarControls(saved);
         } else {

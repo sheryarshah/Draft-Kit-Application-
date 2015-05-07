@@ -29,7 +29,7 @@ public class Team {
     final IntegerProperty RBIK;
     final DoubleProperty SBERA;
     final DoubleProperty BAWHIP;
-    final StringProperty q_p;
+    final StringProperty qp3;
 
     final StringProperty proTeam;
     final StringProperty lastName;
@@ -46,15 +46,31 @@ public class Team {
     final StringProperty nation;
 
     ObservableList<Team> myTeamPlayers;
+    ObservableList<Team> taxiPlayers;
 
     String draftName;
+
+    final IntegerProperty playerSize;
+    final IntegerProperty salaryLeft;
+    final DoubleProperty salaryPP;
+    final IntegerProperty R;
+    final IntegerProperty HR;
+    final IntegerProperty RBI;
+    final DoubleProperty SB;
+    final DoubleProperty BA;
+    final IntegerProperty W;
+    final IntegerProperty SV;
+    final IntegerProperty K;
+    final DoubleProperty ERA;
+    final DoubleProperty WHIP;
+    final IntegerProperty totalPoints;
 
     public Team() {
         positionPlaying = new SimpleStringProperty("N/A");
         lastName = new SimpleStringProperty("N/A");
         firstName = new SimpleStringProperty("N/A");
         proTeam = new SimpleStringProperty("N/A");
-        q_p = new SimpleStringProperty("N/A");
+        qp3 = new SimpleStringProperty("N/A");
 
         RW = new SimpleIntegerProperty(-1);
         HR_SV = new SimpleIntegerProperty(-1);
@@ -72,6 +88,22 @@ public class Team {
         notes = new SimpleStringProperty("N/A");
 
         myTeamPlayers = FXCollections.observableArrayList();
+        taxiPlayers = FXCollections.observableArrayList();
+
+        playerSize = new SimpleIntegerProperty(-10);
+        salaryLeft = new SimpleIntegerProperty(-10);
+        salaryPP = new SimpleDoubleProperty(-10);
+        R = new SimpleIntegerProperty(-10);
+        HR = new SimpleIntegerProperty(-1);
+        RBI = new SimpleIntegerProperty(-1);
+        SB = new SimpleDoubleProperty(-1.0);
+        BA = new SimpleDoubleProperty(-1.0);
+        W = new SimpleIntegerProperty(-1);
+        SV = new SimpleIntegerProperty(-1);
+        K = new SimpleIntegerProperty(-1);
+        ERA = new SimpleDoubleProperty(-1);
+        WHIP = new SimpleDoubleProperty(-1);
+        totalPoints = new SimpleIntegerProperty(-1);
 
     }
 
@@ -97,6 +129,22 @@ public class Team {
 
     public void clearTeamPlayers() {
         myTeamPlayers.clear();
+    }
+
+    public void addTaxiPlayers(Team ti) {
+        taxiPlayers.add(ti);
+    }
+
+    public ObservableList<Team> getTaxiPlayers() {
+        return taxiPlayers;
+    }
+
+    public void removeTaxiPlayers(Team taxiPlayerToRemove) {
+        taxiPlayers.remove(taxiPlayerToRemove);
+    }
+
+    public void clearTaxiPlayers() {
+        taxiPlayers.clear();
     }
 
     public double getEstimatedValue() {
@@ -212,15 +260,15 @@ public class Team {
     }
 
     public String getQPosition() {
-        return q_p.get();
+        return qp3.get();
     }
 
     public void setQPosition(String initQPosition) {
-        q_p.set(initQPosition);
+        qp3.set(initQPosition);
     }
 
     public StringProperty qpProperty() {
-        return q_p;
+        return qp3;
     }
 
     public int getRW() {
@@ -305,6 +353,174 @@ public class Team {
 
     public IntegerProperty salaryProperty() {
         return salary;
+    }
+
+    public int getPlayerSize() {
+        return playerSize.get();
+    }
+
+    public void setPlayerSize(int initPlayerSize) {
+        playerSize.set(initPlayerSize);
+    }
+
+    public IntegerProperty playerSizeProperty() {
+        return playerSize;
+    }
+
+    public int getSalaryLeft() {
+        return salaryLeft.get();
+    }
+
+    public void setSalaryLeft(int initSalaryLeft) {
+        salaryLeft.set(initSalaryLeft);
+    }
+
+    public IntegerProperty salaryLeftProperty() {
+        return salaryLeft;
+    }
+    
+    public double getSalaryPP() {
+        return salaryPP.get();
+    }
+
+    public void setSalaryPP(double initSalaryPP) {
+        salaryPP.set(initSalaryPP);
+    }
+
+    public DoubleProperty salaryPPProperty() {
+        return salaryPP;
+    }
+
+    public int getR() {
+        return R.get();
+    }
+
+    public void setR(int initR) {
+        R.set(initR);
+    }
+
+    public IntegerProperty rProperty() {
+        return R;
+    }
+
+    public int getHR() {
+        return HR.get();
+    }
+
+    public void setHR(int initHR) {
+        HR.set(initHR);
+    }
+
+    public IntegerProperty hrProperty() {
+        return HR;
+    }
+
+    public int getRBI() {
+        return RBI.get();
+    }
+
+    public void setRBI(int initRBI) {
+        RBI.set(initRBI);
+    }
+
+    public IntegerProperty rbiProperty() {
+        return RBI;
+    }
+
+    public double getSB() {
+        return SB.get();
+    }
+
+    public void setSB(double initSB) {
+        SB.set(initSB);
+    }
+
+    public DoubleProperty sbProperty() {
+        return SB;
+    }
+
+    public double getBA() {
+        return BA.get();
+    }
+
+    public void setBA(double initBA) {
+        BA.set(initBA);
+    }
+
+    public DoubleProperty baProperty() {
+        return BA;
+    }
+
+    public int getW() {
+        return W.get();
+    }
+
+    public void setW(int initW) {
+        W.set(initW);
+    }
+
+    public IntegerProperty wProperty() {
+        return W;
+    }
+
+    public int getSV() {
+        return SV.get();
+    }
+
+    public void setSV(int initSV) {
+        SV.set(initSV);
+    }
+
+    public IntegerProperty svProperty() {
+        return SV;
+    }
+
+    public int getK() {
+        return HR.get();
+    }
+
+    public void setK(int initK) {
+        K.set(initK);
+    }
+
+    public IntegerProperty kProperty() {
+        return K;
+    }
+
+    public double getERA() {
+        return ERA.get();
+    }
+
+    public void setERA(double initERA) {
+        ERA.set(initERA);
+    }
+
+    public DoubleProperty eraProperty() {
+        return ERA;
+    }
+
+    public double getWHIP() {
+        return WHIP.get();
+    }
+
+    public void setWHIP(double initWHIP) {
+        WHIP.set(initWHIP);
+    }
+
+    public DoubleProperty whipProperty() {
+        return WHIP;
+    }
+
+    public int getTotalPoints() {
+        return totalPoints.get();
+    }
+
+    public void setTotalPoints(int initTotalPoints) {
+        totalPoints.set(initTotalPoints);
+    }
+
+    public IntegerProperty totalPointsProperty() {
+        return totalPoints;
     }
 
 }
