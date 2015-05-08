@@ -45,6 +45,10 @@ public class Draft {
 
     String draftName;
 
+    ObservableList<Team> draftPlayers;
+
+    Team t;
+
     public Draft() {
         players = FXCollections.observableArrayList();
         pitchers = FXCollections.observableArrayList();
@@ -77,6 +81,24 @@ public class Draft {
         stl = FXCollections.observableArrayList();
         wsh = FXCollections.observableArrayList();
 
+        draftPlayers = FXCollections.observableArrayList();
+
+    }
+
+    public ObservableList<Team> getDraftPlayers() {
+        return draftPlayers;
+    }
+
+    public void addDraftPlayers(Team ti) {
+        draftPlayers.add(ti);
+    }
+
+    public void removeDraftPlayers(Team draftPlayerToRemove) {
+        draftPlayers.remove(draftPlayerToRemove);
+    }
+
+    public void clearDraftPlayers() {
+        draftPlayers.clear();
     }
 
     public String getDraftName() {
@@ -565,10 +587,11 @@ public class Draft {
             int playerSize = 23;
             int salaryLeft = 260;
             double salaryPP;
+            int totalPoint = 0;
 
             playerSize -= getTeam().get(i).getTeamPlayers().size();
 
-            Team t = new Team();
+            t = new Team();
             t.setName(getTeam().get(i).getName());
             t.setPlayerSize(playerSize);
             t.setSalaryLeft(salaryLeft);
@@ -582,8 +605,7 @@ public class Draft {
                     rbiCounter += getTeam().get(i).getTeamPlayers().get(j).getRBIK();
                     sbCounter += getTeam().get(i).getTeamPlayers().get(j).getSBERA();
                     baCounter += getTeam().get(i).getTeamPlayers().get(j).getBAWHIP();
-                }
-                else{
+                } else {
                     wCounter += getTeam().get(i).getTeamPlayers().get(j).getRW();
                     svCounter += getTeam().get(i).getTeamPlayers().get(j).getHR_SV();
                     kCounter += getTeam().get(i).getTeamPlayers().get(j).getRBIK();
@@ -605,10 +627,20 @@ public class Draft {
                 t.setWHIP(whipCounter);
 
             }
+
             addTeam1(t);
+            //totalPoint = this.calculateTotalPoint();
         }
 
         return myTeam1;
+    }
+
+    public int calculateTotalPoint() {
+        for (int k = 0; k < getTeam().size(); k++) {
+            System.out.println("efef = " + getTeam1().get(0).getR());
+        }
+
+        return 96;
     }
 
     public void removeTeam1(Team teamToRemove1) {

@@ -48,6 +48,8 @@ public class Team {
     ObservableList<Team> myTeamPlayers;
     ObservableList<Team> taxiPlayers;
 
+    final IntegerProperty pick;
+
     String draftName;
 
     final IntegerProperty playerSize;
@@ -82,13 +84,15 @@ public class Team {
         nation = new SimpleStringProperty("N/A");
 
         contract = new SimpleStringProperty("N/A");
-        salary = new SimpleIntegerProperty(-1);
+        salary = new SimpleIntegerProperty(0);
 
         yearOfBirth = new SimpleIntegerProperty(-1);
         notes = new SimpleStringProperty("N/A");
 
         myTeamPlayers = FXCollections.observableArrayList();
         taxiPlayers = FXCollections.observableArrayList();
+
+        pick = new SimpleIntegerProperty(-1);
 
         playerSize = new SimpleIntegerProperty(-10);
         salaryLeft = new SimpleIntegerProperty(-10);
@@ -145,6 +149,18 @@ public class Team {
 
     public void clearTaxiPlayers() {
         taxiPlayers.clear();
+    }
+
+    public int getPick() {
+        return pick.get();
+    }
+
+    public void setPick(int initPick) {
+        pick.set(initPick);
+    }
+
+    public IntegerProperty pickProperty() {
+        return pick;
     }
 
     public double getEstimatedValue() {
@@ -378,7 +394,7 @@ public class Team {
     public IntegerProperty salaryLeftProperty() {
         return salaryLeft;
     }
-    
+
     public double getSalaryPP() {
         return salaryPP.get();
     }

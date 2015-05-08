@@ -2,6 +2,7 @@ package wbdk.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
@@ -9,6 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
@@ -355,7 +357,7 @@ public class WBDK_GUI implements WBDKDataView {
     TableColumn era;
     TableColumn whip;
     TableColumn totalPoint;
-    
+
     //TABLE COLUMNS CONSTANTS FOR FANTASY STANDING
     static final String COL_TEAM = "Team";
     static final String COL_PLAYER_NEEDED = "Players Needed";
@@ -372,18 +374,18 @@ public class WBDK_GUI implements WBDKDataView {
     static final String COL_ERA = "ERA";
     static final String COL_WHIP = "WHIP";
     static final String COL_TOTAL_POINT = "Total Points";
-    
+
     //BELOW IS THE STUFF FOR DRAFT SCREEN
     VBox draftBox;
     HBox draftToolbarBox;
     VBox draftTableBox;
-    
+
     FlowPane draftButtonPane;
-    
+
     Button selectPlayerButton;
     Button autoDraftButton;
     Button pauseDraftButton;
-    
+
     //TABLE FOR FANTASY TEAM TAXI SQUAD
     TableView<Team> draftTable;
     TableColumn pick;
@@ -392,9 +394,19 @@ public class WBDK_GUI implements WBDKDataView {
     TableColumn fantasyTeamName;
     TableColumn contractDraft;
     TableColumn salaryDraft;
-    
+
     static final String COL_PICK = "Pick#";
 
+    boolean startDraft = true;
+    int counter1 = 0;
+    int teamC = 0;
+    boolean taxiFlag = true;
+    boolean startTaxi = false;
+    boolean stopSelectPlayer = true;
+    boolean startingLineUpFlag = true;
+    boolean taxiSquadFlag = false;
+    int taxiCounter = 0;
+    int pickCounter = 0;
 
     /**
      * Constructor for making this GUI, note that it does not initialize the UI
@@ -667,7 +679,7 @@ public class WBDK_GUI implements WBDKDataView {
         initPlayerScreenWorkspace();
         fantasyTeamScreenWork();
         fantasyStandingSceen();
-        draftScreen();
+        //  draftScreen();
     }
 
     // INITIALIZES THE TOP PORTION OF THE FANTASY TEAM SCREEN WORKSPACE
@@ -881,35 +893,35 @@ public class WBDK_GUI implements WBDKDataView {
         draftScreenHeadingLabel = initChildLabel(topWorkspacePaneDraft, WBDK_PropertyType.DRAFT_HEADING_LABEL, CLASS_HEADING_LABEL);
 
         topWorkspacePaneDraft.getChildren().add(draftBox);
-        
+
         workspacePane.setTop(topWorkspacePaneDraft);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
 
     }
-    
-    public void draftScreen(){
+
+    public void draftScreen() {
         draftBox = new VBox();
         draftToolbarBox = new HBox();
-        
+
         draftButtonPane = new FlowPane();
         selectPlayerButton = initChildButton(draftButtonPane, WBDK_PropertyType.SELECT_PLAYER_ICON, WBDK_PropertyType.SELECT_PLAYER_TOOLTIP, false);
         autoDraftButton = initChildButton(draftButtonPane, WBDK_PropertyType.AUTO_DRAFT_ICON, WBDK_PropertyType.AUTO_DRAFT_TOOLTIP, activateButton);
         pauseDraftButton = initChildButton(draftButtonPane, WBDK_PropertyType.PAUSE_DRAFT_ICON, WBDK_PropertyType.PAUSE_DRAFT_TOOLTIP, activateButton);
-        
+
         draftToolbarBox.getChildren().add(draftButtonPane);
-        
+
         draftTableBox = new VBox();
-        
+
         draftTable = new TableView();
-        
+
         //NOW SETUP THE TABLE COLUMNS
         pick = new TableColumn(COL_PICK);
         first = new TableColumn(COL_FIRST);
         last = new TableColumn(COL_LAST);
-        fantasyTeamName = new TableColumn(COL_PRO_TEAM);
+        fantasyTeamName = new TableColumn(COL_TEAM);
         contractDraft = new TableColumn(COL_CONTRACT);
         salaryDraft = new TableColumn(COL_SALARY);
-        
+
         //START ADDING THE COLUMNS
         draftTable.getColumns().add(pick);
         draftTable.getColumns().add(first);
@@ -917,15 +929,29 @@ public class WBDK_GUI implements WBDKDataView {
         draftTable.getColumns().add(fantasyTeamName);
         draftTable.getColumns().add(contractDraft);
         draftTable.getColumns().add(salaryDraft);
-        
-        
+
+        // AND LINK THE COLUMNS TO THE DATA
+        pick.setCellValueFactory(new PropertyValueFactory<>("pick"));
+        first.setCellValueFactory(new PropertyValueFactory<>("firstName"));
+        last.setCellValueFactory(new PropertyValueFactory<>("lastName"));
+        fantasyTeamName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        contractDraft.setCellValueFactory(new PropertyValueFactory<>("contract"));
+        salaryDraft.setCellValueFactory(new PropertyValueFactory<>("salary"));
+
         draftTable.setPrefHeight(600);
-        
+
         draftTableBox.getChildren().add(draftTable);
-        
+
         draftBox.getChildren().add(draftToolbarBox);
         draftBox.getChildren().add(draftTableBox);
 
+        this.selectPlayerButtonAction();
+
+    }
+
+    public void updateDraftTable() {
+
+        draftTable.setItems(dataManager.getDraft().getDraftPlayers());
     }
 
     // INITIALIZES THE PLAYER SCREEN WORKWPACE UI
@@ -1320,7 +1346,8 @@ public class WBDK_GUI implements WBDKDataView {
         fantasyStandingTable.setPrefHeight(600);
 
         fantasyStandingTable.getItems().clear();
-        
+
+        // dataManager.getDraft().calculateTotalPoint();
         fantasyStandingTable.setItems(dataManager.getDraft().getTeam1());
 
     }
@@ -1552,6 +1579,7 @@ public class WBDK_GUI implements WBDKDataView {
             }
         });
         playerTable.setOnMouseClicked(e -> {
+
             if (e.getClickCount() == 2) {
                 Player p = playerTable.getSelectionModel().getSelectedItem();
 
@@ -1598,8 +1626,6 @@ public class WBDK_GUI implements WBDKDataView {
             }
         });
 
-        //  teamSelectionCombo.getItems().clear();
-        //   teamSelectionCombo.getSelectionModel().select(dataManager.getDraft().getTeam().get(0));
         //FANTASY TEAM SCREEN CONTROLLER
         fantasyTeamController = new FantasyTeamScreenEditController(primaryStage, messageDialog, yesNoCancelDialog);
         addTeamButton.setOnAction(e -> {
@@ -1644,6 +1670,101 @@ public class WBDK_GUI implements WBDKDataView {
 
             }
         });
+
+    }
+
+    public void selectPlayerButtonAction() {
+
+        pauseDraftButton.setOnAction(e -> {
+            startDraft = false;
+        });
+
+        autoDraftButton.setOnAction(e -> {
+            startDraft = true;
+
+            Task<Void> task = new Task<Void>() {
+                ReentrantLock draftLock = new ReentrantLock();
+
+                @Override
+                protected Void call() throws Exception {
+                    draftLock.lock();
+                    try {
+
+                        while (startDraft) {
+                            for (int i = 0; i < dataManager.getDraft().getTeam().size(); i++) {
+
+                            }
+
+                        }
+
+                    } finally {
+                        draftLock.unlock();
+
+                    }
+                    return null;
+                }
+
+            };
+
+            //THIS GETS THE THREAD STARTED
+            Thread thread = new Thread(task);
+            thread.start();
+        });
+
+        selectPlayerButton.setOnAction(e -> {
+
+            pickCounter++;
+
+            if (taxiFlag) {
+                counter1++;
+                if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() >= 23) {
+                    teamC++;
+                    counter1 = 1;
+                    System.out.println("teamSize = " + (dataManager.getDraft().getTeam().size() - 1) + " teamC = " + teamC);
+                }
+            }
+            
+            if (startingLineUpFlag) {
+                if (dataManager.getDraft().getTeam().size() - 1 < teamC) {
+                    System.out.println("ggwg");
+                    teamC = 0;
+                    taxiFlag = false;
+                    startTaxi = true;
+                    startingLineUpFlag = false;
+                    taxiSquadFlag = true;
+                }
+            }
+
+            if (startTaxi) {
+                taxiCounter++;
+                if (dataManager.getDraft().getTeam().get(teamC).getTaxiPlayers().size() >= 8) {
+                    teamC++;
+                    taxiCounter = 1;
+
+                }
+            }
+
+            if (taxiSquadFlag) {
+                if (dataManager.getDraft().getTeam().size() - 1 < teamC) {
+                    stopSelectPlayer = false;
+                    messageDialog.show("All the teams are filled");
+                }
+            }
+
+            Player p = dataManager.getDraft().getPlayers().get(0);
+            try {
+
+                if (stopSelectPlayer) {
+                    playerController.handleSelectPlayerRequest(this, p, dataManager, pickCounter, teamC);
+                }
+
+            } catch (IOException ex) {
+                Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        });
+
+        this.updateDraftTable();
 
     }
 

@@ -585,7 +585,7 @@ public class PlayerScreenDialog extends Stage {
             if (positions.contains("OF")) {
                 for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
                     if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("OF")) {
-                        position3B_counter++;
+                        positionOF_counter++;
 
                     }
                 }
@@ -617,7 +617,7 @@ public class PlayerScreenDialog extends Stage {
 
                     }
                 }
-                if (position3B_counter <= 9) {
+                if (positionP_counter <= 9) {
                     position.add("P");
                 }
                 if (positionP_counter > 1) {

@@ -169,6 +169,8 @@ public class FileController {
 
             // IF THE USER REALLY WANTS TO OPEN A Course
             if (continueToOpen) {
+                WBDKDataManager dataManager = gui.getDataManager();
+                dataManager.reset();
                 // GO AHEAD AND PROCEED LOADING A Course
                 promptToOpen(gui);
             }
@@ -211,8 +213,9 @@ public class FileController {
      * @param gui The user interface editing the Draft.
      */
     public void handleDraftScreenRequest(WBDK_GUI gui) {
-        gui.initDraftScreenWorkspace();
         gui.draftScreen();
+        gui.initDraftScreenWorkspace();
+        
     }
 
     /**

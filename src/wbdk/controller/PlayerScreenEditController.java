@@ -6,6 +6,11 @@
 package wbdk.controller;
 
 import java.io.IOException;
+import java.util.concurrent.locks.ReentrantLock;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import properties_manager.PropertiesManager;
@@ -36,7 +41,19 @@ public class PlayerScreenEditController {
 
     int trackSelect;
     int counter = 0;
+    int counter1 = 0;
     int hr;
+
+    int positionC_counter = 0;
+    int position1B_counter = 0;
+    int positionCI_counter = 0;
+    int position3B_counter = 0;
+    int position2B_counter = 0;
+    int positionMI_counter = 0;
+    int positionSS_counter = 0;
+    int positionU_counter = 0;
+    int positionOF_counter = 0;
+    int positionP_counter = 0;
 
     // WE WANT TO KEEP TRACK OF WHEN SOMETHING HAS NOT BEEN SAVED
     private boolean saved;
@@ -123,6 +140,75 @@ public class PlayerScreenEditController {
             //update toolbar
             gui.updateToolbarControls(saved);
         }
+    }
+
+    public void handleSelectPlayerRequest(WBDK_GUI gui, Player player, WBDKDataManager dataManager, int pickCounter, int teamC) throws IOException {
+        Team t = new Team();
+
+        ObservableList<String> position = FXCollections.observableArrayList();
+        String positions = player.getQp();
+
+        if (positions.contains("P")) {
+            for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
+                    positionP_counter++;
+
+                }
+            }
+            if (position3B_counter <= 9) {
+                position.add("P");
+            }
+            if (positionP_counter > 1) {
+                positionP_counter = 0;
+            }
+        }
+
+        t.setPositionPlaying(positions);
+        t.setFirstName(player.getFirstName());
+        t.setLastName(player.getLastName());
+        t.setProTeam(player.getTeam());
+        t.setQPosition(player.getQp());
+        t.setYearOfBirth(player.getYearOfBirth());
+        t.setRW(player.getRW());
+        t.setHRSV(player.getHR_SV());
+        t.setRBIK(player.getRBIK());
+        t.setSBERA(player.getSBERA());
+        t.setBAWHIP(player.getBAWHIP());
+        t.setNotes(player.getNotes());
+        t.setNation(player.getNation());
+        t.setPick(pickCounter);
+        t.setName(dataManager.getDraft().getTeam().get(teamC).getName());
+
+        if (dataManager.getDraft().getTeam().get(teamC) != null) {
+            t.setContract("S2");
+            t.setSalary(1);
+            if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() < 23) {
+                dataManager.getDraft().getTeam().get(teamC).addTeamPlayers(t);
+                dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().sort(new TeamPlayerComparator());
+                dataManager.getDraft().removePlayer(player);
+            } else {
+                t.setContract("X");
+                t.setSalary(0);
+                dataManager.getDraft().getTeam().get(teamC).addTaxiPlayers(t);
+                dataManager.getDraft().getTeam().get(teamC).getTaxiPlayers().sort(new TeamPlayerComparator());
+                dataManager.getDraft().removePlayer(player);
+            }
+        }
+
+        dataManager.getDraft().addDraftPlayers(t);
+
+        /*  if (counter1 > 23) {
+         dataManager.getDraft().getTeam().get(0).addTaxiPlayers(t);
+         dataManager.getDraft().getTeam().get(0).getTaxiPlayers().sort(new TeamPlayerComparator());
+         dataManager.getDraft().removePlayer(player);
+
+         } else {
+         dataManager.getDraft().getTeam().get(0).addTeamPlayers(t);
+         dataManager.getDraft().getTeam().get(0).getTeamPlayers().sort(new TeamPlayerComparator());
+         dataManager.getDraft().removePlayer(player);
+         }*/
+        gui.updateToolbarControls(saved);
+
     }
 
 }

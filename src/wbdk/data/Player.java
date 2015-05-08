@@ -292,29 +292,4 @@ public class Player {
     public DoubleProperty bawhipProperty() {
         return BAWHIP;
     }
-
- /*   public int getR() {
-        return R.get();
-    }
-
-    public void setR(int initR) {
-        R.set(initR);
-    }
-
-    public IntegerProperty rProperty() {
-        return R;
-    }
-
-    public int getHR() {
-        return HR.get();
-    }
-
-    public void setHR(int initHR) {
-        HR.set(initHR);
-    }
-
-    public IntegerProperty hrProperty() {
-        return HR;
-    }
-*/
 }
