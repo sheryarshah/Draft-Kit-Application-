@@ -147,7 +147,7 @@ public class FantasyTeamScreenEditController {
         if (ftsd.wasCompleteSelected()) {
             counter = dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().size();
             System.out.println("fantasy = "+counter);
-            if (counter > 23) {
+            if (dataManager.getDraft().getTeam().get(ftsd.getI()).getTeamPlayers().size() >= 23) {
                 dataManager.getDraft().getTeam().get(ftsd.getI()).addTaxiPlayers(ftsd.getAccessPlayer());
                 dataManager.getDraft().getTeam().get(ftsd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().getTeam().get(trackSelect).removeTeamPlayers(playerToEdit);

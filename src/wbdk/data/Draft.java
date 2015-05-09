@@ -586,7 +586,7 @@ public class Draft {
             double whipCounter = 0;
             int playerSize = 23;
             int salaryLeft = 260;
-            double salaryPP;
+            double salaryPP = 0;
             int totalPoint = 0;
 
             playerSize -= getTeam().get(i).getTeamPlayers().size();
@@ -598,7 +598,10 @@ public class Draft {
 
             for (int j = 0; j < getTeam().get(i).getTeamPlayers().size(); j++) {
                 salaryLeft -= getTeam().get(i).getTeamPlayers().get(j).getSalary();
-                salaryPP = salaryLeft / playerSize;
+                if(playerSize != 0){
+                    salaryPP = salaryLeft / playerSize;
+                }
+                
                 if (!getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
                     rCounter += getTeam().get(i).getTeamPlayers().get(j).getRW();
                     hrCounter += getTeam().get(i).getTeamPlayers().get(j).getHR_SV();

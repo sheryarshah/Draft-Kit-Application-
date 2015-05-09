@@ -2,9 +2,11 @@ package wbdk.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -1675,12 +1677,8 @@ public class WBDK_GUI implements WBDKDataView {
 
     public void selectPlayerButtonAction() {
 
-        pauseDraftButton.setOnAction(e -> {
-            startDraft = false;
-        });
-
         autoDraftButton.setOnAction(e -> {
-            startDraft = true;
+           // startDraft = true;
 
             Task<Void> task = new Task<Void>() {
                 ReentrantLock draftLock = new ReentrantLock();
@@ -1689,12 +1687,68 @@ public class WBDK_GUI implements WBDKDataView {
                 protected Void call() throws Exception {
                     draftLock.lock();
                     try {
+                        startDraft = true;
+                        pauseDraftButton.setOnAction(e -> {
+                            startDraft = false;
+                        });
+                        for (int k = 0; k < 500; k++) {
 
-                        while (startDraft) {
-                            for (int i = 0; i < dataManager.getDraft().getTeam().size(); i++) {
+                            if (startDraft) {
+                                Platform.runLater(() -> {
 
+                                    pickCounter++;
+
+                                    if (taxiFlag) {
+                                        counter1++;
+                                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() >= 23) {
+                                            teamC++;
+                                            counter1 = 1;
+                                        }
+                                    }
+
+                                    if (startingLineUpFlag) {
+                                        if (dataManager.getDraft().getTeam().size() - 1 < teamC) {
+                                            teamC = 0;
+                                            taxiFlag = false;
+                                            startTaxi = true;
+                                            startingLineUpFlag = false;
+                                            taxiSquadFlag = true;
+                                        }
+                                    }
+
+                                    if (startTaxi) {
+                                        taxiCounter++;
+                                        if (dataManager.getDraft().getTeam().get(teamC).getTaxiPlayers().size() >= 8) {
+                                            teamC++;
+                                            taxiCounter = 1;
+
+                                        }
+                                    }
+
+                                    if (taxiSquadFlag) {
+                                        if (dataManager.getDraft().getTeam().size() - 1 < teamC) {
+                                            stopSelectPlayer = false;
+                                            messageDialog.show("All the teams are filled");
+                                        }
+                                    }
+
+                                    Random r = new Random();
+                                    int i1 = r.nextInt(dataManager.getDraft().getPlayers().size() - 1) + 1;
+                                    System.out.println(i1);
+                                    Player p = dataManager.getDraft().getPlayers().get(i1);
+                                    if (stopSelectPlayer) {
+                                        try {
+                                            playerController.handleSelectPlayerRequest(p, dataManager, pickCounter, teamC);
+                                        } catch (IOException ex) {
+                                            Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }
+
+                                    updateDraftTable();
+
+                                });
+                                Thread.sleep(100);
                             }
-
                         }
 
                     } finally {
@@ -1709,6 +1763,7 @@ public class WBDK_GUI implements WBDKDataView {
             //THIS GETS THE THREAD STARTED
             Thread thread = new Thread(task);
             thread.start();
+
         });
 
         selectPlayerButton.setOnAction(e -> {
@@ -1720,13 +1775,11 @@ public class WBDK_GUI implements WBDKDataView {
                 if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() >= 23) {
                     teamC++;
                     counter1 = 1;
-                    System.out.println("teamSize = " + (dataManager.getDraft().getTeam().size() - 1) + " teamC = " + teamC);
                 }
             }
-            
+
             if (startingLineUpFlag) {
                 if (dataManager.getDraft().getTeam().size() - 1 < teamC) {
-                    System.out.println("ggwg");
                     teamC = 0;
                     taxiFlag = false;
                     startTaxi = true;
@@ -1751,11 +1804,14 @@ public class WBDK_GUI implements WBDKDataView {
                 }
             }
 
-            Player p = dataManager.getDraft().getPlayers().get(0);
+            Random r = new Random();
+            int i1 = r.nextInt(dataManager.getDraft().getPlayers().size() - 1) + 1;
+            System.out.println(i1);
+            Player p = dataManager.getDraft().getPlayers().get(i1);
             try {
 
                 if (stopSelectPlayer) {
-                    playerController.handleSelectPlayerRequest(this, p, dataManager, pickCounter, teamC);
+                    playerController.handleSelectPlayerRequest(p, dataManager, pickCounter, teamC);
                 }
 
             } catch (IOException ex) {

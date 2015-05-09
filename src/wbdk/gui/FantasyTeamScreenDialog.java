@@ -365,7 +365,7 @@ public class FantasyTeamScreenDialog extends Stage {
                         positionC_counter++;
                     }
                 }
-                if (positionC_counter <= 2) {
+                if (positionC_counter < 2) {
                     position.add("C");
                 }
                 if (positionC_counter > 2) {
@@ -436,11 +436,11 @@ public class FantasyTeamScreenDialog extends Stage {
             if (positions.contains("OF")) {
                 for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
                     if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("OF")) {
-                        position3B_counter++;
+                        positionOF_counter++;
 
                     }
                 }
-                if (positionOF_counter <= 5) {
+                if (positionOF_counter < 5) {
                     position.add("OF");
                 }
                 if (positionOF_counter > 5) {
@@ -468,7 +468,7 @@ public class FantasyTeamScreenDialog extends Stage {
 
                     }
                 }
-                if (position3B_counter <= 9) {
+                if (positionP_counter < 9) {
                     position.add("P");
                 }
                 if (positionP_counter > 1) {
@@ -477,13 +477,12 @@ public class FantasyTeamScreenDialog extends Stage {
             }
             if (positions.contains("2B") || positions.contains("SS")) {
                 for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("2B")
-                            || dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("SS")) {
+                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("MI")) {
                         positionMI_counter++;
 
                     }
                 }
-                if (positionMI_counter <= 1) {
+                if (positionMI_counter < 1) {
                     position.add("MI");
                 }
                 if (positionMI_counter > 1) {
@@ -492,13 +491,12 @@ public class FantasyTeamScreenDialog extends Stage {
             }
             if (positions.contains("1B") || positions.contains("3B")) {
                 for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("1B")
-                            || dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("3B")) {
+                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("CI")) {
                         positionCI_counter++;
 
                     }
                 }
-                if (positionCI_counter <= 1) {
+                if (positionCI_counter < 1) {
                     position.add("CI");
                 }
                 if (positionCI_counter > 1) {

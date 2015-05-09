@@ -514,7 +514,7 @@ public class PlayerScreenDialog extends Stage {
                         counterC++;
                     }
                 }
-                if (positionC_counter <= 2) {
+                if (positionC_counter < 2) {
                     position.add("C");
                 }
                 if (positionC_counter > 2) {
@@ -589,7 +589,7 @@ public class PlayerScreenDialog extends Stage {
 
                     }
                 }
-                if (positionOF_counter <= 5) {
+                if (positionOF_counter < 5) {
                     position.add("OF");
                 }
                 if (positionOF_counter > 5) {
@@ -617,7 +617,7 @@ public class PlayerScreenDialog extends Stage {
 
                     }
                 }
-                if (positionP_counter <= 9) {
+                if (positionP_counter < 9) {
                     position.add("P");
                 }
                 if (positionP_counter > 1) {
@@ -626,8 +626,7 @@ public class PlayerScreenDialog extends Stage {
             }
             if (positions.contains("2B") || positions.contains("SS")) {
                 for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("2B")
-                            || dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("SS")) {
+                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("MI")) {
                         positionMI_counter++;
 
                     }
@@ -641,13 +640,12 @@ public class PlayerScreenDialog extends Stage {
             }
             if (positions.contains("1B") || positions.contains("3B")) {
                 for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("1B")
-                            || dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("3B")) {
+                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("CI")) {
                         positionCI_counter++;
 
                     }
                 }
-                if (positionCI_counter <= 1) {
+                if (positionCI_counter < 1) {
                     position.add("CI");
                 }
                 if (positionCI_counter > 1) {

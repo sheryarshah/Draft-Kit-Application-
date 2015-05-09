@@ -54,6 +54,22 @@ public class PlayerScreenEditController {
     int positionU_counter = 0;
     int positionOF_counter = 0;
     int positionP_counter = 0;
+    boolean checkPlayerPos = false;
+
+    boolean MIFlag = true;
+    boolean CIFlag = true;
+    boolean CFlag = true;
+    boolean Flag1B = true;
+    boolean Flag2B = true;
+    boolean Flag3B = true;
+    boolean FlagSS = true;
+    boolean FlagU = true;
+    boolean FlagOF = true;
+    boolean stop = true;
+
+    boolean startTaxi = false;
+
+    int pickCounter1 = 0;
 
     // WE WANT TO KEEP TRACK OF WHEN SOMETHING HAS NOT BEEN SAVED
     private boolean saved;
@@ -107,7 +123,7 @@ public class PlayerScreenEditController {
         // DID THE USER CONFIRM?
         if (psd.wasCompleteSelected()) {
             counter++;
-            if (counter > 23) {
+            if (dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().size() >= 23) {
                 dataManager.getDraft().getTeam().get(psd.getI()).addTaxiPlayers(psd.getTeam());
                 dataManager.getDraft().getTeam().get(psd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().removePlayer(playerToEdit);
@@ -142,73 +158,272 @@ public class PlayerScreenEditController {
         }
     }
 
-    public void handleSelectPlayerRequest(WBDK_GUI gui, Player player, WBDKDataManager dataManager, int pickCounter, int teamC) throws IOException {
-        Team t = new Team();
+    public void handleSelectPlayerRequest(Player player, WBDKDataManager dataManager, int pickCounter, int teamC) throws IOException {
 
-        ObservableList<String> position = FXCollections.observableArrayList();
+        checkPlayerPos = false;
+
+        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() >= 23) {
+            checkPlayerPos = true;
+        }
+        positionC_counter = 0;
+        position1B_counter = 0;
+        position3B_counter = 0;
+        position2B_counter = 0;
+        positionSS_counter = 0;
+        positionOF_counter = 0;
+        positionU_counter = 0;
+        positionP_counter = 0;
+        positionMI_counter = 0;
+        positionCI_counter = 0;
+
+        t = new Team();
+
         String positions = player.getQp();
 
-        if (positions.contains("P")) {
-            for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
-                if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
-                    positionP_counter++;
+        System.out.println(positions);
 
-                }
-            }
-            if (position3B_counter <= 9) {
-                position.add("P");
-            }
-            if (positionP_counter > 1) {
-                positionP_counter = 0;
+        if (stop) {
+            if (teamC > 0) {
+
+                MIFlag = true;
+                CIFlag = true;
+                CFlag = true;
+                Flag1B = true;
+                Flag2B = true;
+                Flag3B = true;
+                FlagSS = true;
+                FlagU = true;
+                FlagOF = true;
+                stop = false;
             }
         }
 
-        t.setPositionPlaying(positions);
-        t.setFirstName(player.getFirstName());
-        t.setLastName(player.getLastName());
-        t.setProTeam(player.getTeam());
-        t.setQPosition(player.getQp());
-        t.setYearOfBirth(player.getYearOfBirth());
-        t.setRW(player.getRW());
-        t.setHRSV(player.getHR_SV());
-        t.setRBIK(player.getRBIK());
-        t.setSBERA(player.getSBERA());
-        t.setBAWHIP(player.getBAWHIP());
-        t.setNotes(player.getNotes());
-        t.setNation(player.getNation());
-        t.setPick(pickCounter);
-        t.setName(dataManager.getDraft().getTeam().get(teamC).getName());
+        if (!startTaxi) {
+            if (CFlag) {
+                if (positions.contains("C")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("C")) {
+                            positionC_counter++;
+                        }
+                    }
+                    if (positionC_counter < 2) {
+                        t.setPositionPlaying("C");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        CFlag = false;
+                    }
 
-        if (dataManager.getDraft().getTeam().get(teamC) != null) {
+                }
+            }
+
+            if (!CIFlag && Flag1B) {
+                if (positions.contains("1B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("1B")) {
+                            position1B_counter++;
+
+                        }
+                    }
+                    if (position1B_counter < 1) {
+                        t.setPositionPlaying("1B");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        Flag1B = false;
+                    }
+
+                }
+            }
+
+            if (!CIFlag && Flag3B) {
+                if (positions.contains("3B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("3B")) {
+                            position3B_counter++;
+
+                        }
+                    }
+                    if (position3B_counter < 1) {
+                        t.setPositionPlaying("3B");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        Flag3B = false;
+                    }
+
+                }
+            }
+
+            if (!MIFlag && Flag2B) {
+                if (positions.contains("2B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("2B")) {
+                            position2B_counter++;
+
+                        }
+                    }
+                    if (position2B_counter < 1) {
+                        t.setPositionPlaying("2B");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        Flag2B = false;
+                    }
+
+                }
+            }
+
+            if (!MIFlag && FlagSS) {
+                if (positions.contains("SS")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("SS")) {
+                            positionSS_counter++;
+                        }
+                    }
+                    if (positionSS_counter < 1) {
+                        t.setPositionPlaying("SS");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        FlagSS = false;
+                    }
+
+                }
+            }
+
+            if (FlagOF) {
+                if (positions.contains("OF")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("OF")) {
+                            positionOF_counter++;
+
+                        }
+                    }
+                    if (positionOF_counter < 5) {
+                        t.setPositionPlaying("OF");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        FlagOF = false;
+                    }
+
+                }
+            }
+
+            if (FlagU) {
+                if (positions.contains("U")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("U")) {
+                            positionU_counter++;
+
+                        }
+                    }
+                    if (positionU_counter < 1) {
+                        t.setPositionPlaying("U");
+                    } else {
+                        checkPlayerPos = false;
+                        FlagU = false;
+                    }
+
+                }
+            }
+
+            if (positions.contains("P")) {
+                for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                    if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
+                        positionP_counter++;
+
+                    }
+                }
+                if (positionP_counter < 9) {
+                    t.setPositionPlaying("P");
+                    checkPlayerPos = true;
+                } else {
+                    checkPlayerPos = false;
+                }
+
+            }
+
+            if (MIFlag) {
+                if (positions.contains("2B") || positions.contains("SS")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("MI")) {
+                            positionMI_counter++;
+
+                        }
+                    }
+                    if (positionMI_counter < 1) {
+                        t.setPositionPlaying("MI");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        MIFlag = false;
+                    }
+
+                }
+            }
+
+            if (CIFlag) {
+                if (positions.contains("1B") || positions.contains("3B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("CI")) {
+                            positionCI_counter++;
+
+                        }
+                    }
+                    if (positionCI_counter < 1) {
+                        t.setPositionPlaying("CI");
+                        checkPlayerPos = true;
+                    } else {
+                        checkPlayerPos = false;
+                        CIFlag = false;
+                    }
+                }
+            }
+        }
+
+        if (checkPlayerPos) {
+            pickCounter1++;
             t.setContract("S2");
             t.setSalary(1);
+            t.setFirstName(player.getFirstName());
+            t.setLastName(player.getLastName());
+            t.setProTeam(player.getTeam());
+            t.setQPosition(player.getQp());
+            t.setYearOfBirth(player.getYearOfBirth());
+            t.setRW(player.getRW());
+            t.setHRSV(player.getHR_SV());
+            t.setRBIK(player.getRBIK());
+            t.setSBERA(player.getSBERA());
+            t.setBAWHIP(player.getBAWHIP());
+            t.setNotes(player.getNotes());
+            t.setNation(player.getNation());
+            t.setPick(pickCounter1);
+            t.setName(dataManager.getDraft().getTeam().get(teamC).getName());
+            if (startTaxi) {
+                t.setPositionPlaying(positions);
+            }
+
             if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() < 23) {
                 dataManager.getDraft().getTeam().get(teamC).addTeamPlayers(t);
                 dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().removePlayer(player);
             } else {
+
+                startTaxi = true;
                 t.setContract("X");
                 t.setSalary(0);
                 dataManager.getDraft().getTeam().get(teamC).addTaxiPlayers(t);
                 dataManager.getDraft().getTeam().get(teamC).getTaxiPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().removePlayer(player);
             }
+
+            dataManager.getDraft().addDraftPlayers(t);
+
         }
 
-        dataManager.getDraft().addDraftPlayers(t);
-
-        /*  if (counter1 > 23) {
-         dataManager.getDraft().getTeam().get(0).addTaxiPlayers(t);
-         dataManager.getDraft().getTeam().get(0).getTaxiPlayers().sort(new TeamPlayerComparator());
-         dataManager.getDraft().removePlayer(player);
-
-         } else {
-         dataManager.getDraft().getTeam().get(0).addTeamPlayers(t);
-         dataManager.getDraft().getTeam().get(0).getTeamPlayers().sort(new TeamPlayerComparator());
-         dataManager.getDraft().removePlayer(player);
-         }*/
-        gui.updateToolbarControls(saved);
-
+        //    gui.updateToolbarControls(saved);
     }
 
 }
