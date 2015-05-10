@@ -109,6 +109,7 @@ public class PlayerScreenDialog extends Stage {
     int positionU_counter = 0;
     int positionOF_counter = 0;
     int positionP_counter = 0;
+    int pickCounter = 0;
 
     // CONSTANTS FOR OUR UI
     public static final String COMPLETE = "Complete";
@@ -396,15 +397,8 @@ public class PlayerScreenDialog extends Stage {
     }
 
     public boolean wasCompleteSelected() {
-        return selection.equals(COMPLETE);
-    }
 
-    public boolean wasCompleteSelected1() {
-        if (checkContents()) {
-            return selection.equals(COMPLETE);
-        } else {
-            return false;
-        }
+        return selection.equals(COMPLETE);
     }
 
     public boolean checkContents() {
@@ -690,7 +684,10 @@ public class PlayerScreenDialog extends Stage {
         t.setContract(contractComboBox.getValue().toString());
         contractComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             t.setContract(contractComboBox.getValue().toString());
-
+            if (contractComboBox.getValue().toString().equalsIgnoreCase("S2")) {
+                pickCounter++;
+                t.setPick(pickCounter);
+            }
         });
 
         salaryTextField = new TextField();

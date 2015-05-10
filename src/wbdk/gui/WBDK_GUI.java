@@ -583,6 +583,18 @@ public class WBDK_GUI implements WBDKDataView {
         teamSelectionCombo.getSelectionModel().select(draftToReload.getTeam().get(0));
         fantasyTeamTable.setItems(draftToReload.getTeam().get(0).getTeamPlayers());
 
+        for (int i = 0; i < draftToReload.getTeam().size(); i++) {
+            for (int j = 0; j < draftToReload.getTeam().get(i).getTeamPlayers().size(); j++) {
+                if (draftToReload.getTeam().get(i).getTeamPlayers().get(j).getContract().equalsIgnoreCase("S2")) {
+                    draftToReload.addDraftPlayers(draftToReload.getTeam().get(i).getTeamPlayers().get(j));
+
+                }
+            }
+
+        }
+
+        
+
         draftController.enable(true);
     }
 
@@ -707,6 +719,7 @@ public class WBDK_GUI implements WBDKDataView {
         trackSelect = teamSelectionCombo.getSelectionModel().getSelectedIndex();
         fantasyTeamTable.setItems(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers());
         taxiTeamTable.setItems(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers());
+        draftTable.setItems(draft.getDraftPlayers());
 
     }
 
@@ -1278,7 +1291,7 @@ public class WBDK_GUI implements WBDKDataView {
 
     public void fantasyStandingSceen() {
 
-        dataManager.getDraft().clearTeam1();
+        dataManager.getDraft().clearTeam2();
 
         fantasyStandingBox = new VBox();
 
@@ -1347,10 +1360,7 @@ public class WBDK_GUI implements WBDKDataView {
 
         fantasyStandingTable.setPrefHeight(600);
 
-        fantasyStandingTable.getItems().clear();
-
-        // dataManager.getDraft().calculateTotalPoint();
-        fantasyStandingTable.setItems(dataManager.getDraft().getTeam1());
+        fantasyStandingTable.setItems(dataManager.getDraft().getTeam2());
 
     }
 
@@ -1678,7 +1688,7 @@ public class WBDK_GUI implements WBDKDataView {
     public void selectPlayerButtonAction() {
 
         autoDraftButton.setOnAction(e -> {
-           // startDraft = true;
+            // startDraft = true;
 
             Task<Void> task = new Task<Void>() {
                 ReentrantLock draftLock = new ReentrantLock();

@@ -98,6 +98,8 @@ public class FantasyTeamScreenDialog extends Stage {
     int positionOF_counter = 0;
     int positionP_counter = 0;
 
+    int pickCounter = 0;
+
     // CONSTANTS FOR OUR UI
     public static final String COMPLETE = "Complete";
     public static final String CANCEL = "Cancel";
@@ -149,6 +151,10 @@ public class FantasyTeamScreenDialog extends Stage {
     }
 
     public Team getTeam() {
+        return t;
+    }
+
+    public Team getTeam1() {
         return team;
     }
 
@@ -248,7 +254,11 @@ public class FantasyTeamScreenDialog extends Stage {
     }
 
     public boolean wasCompleteSelected() {
+        return selection.equals(COMPLETE);
 
+    }
+
+    public boolean wasCompleteSelected1() {
         return selection.equals(COMPLETE);
 
     }
@@ -540,7 +550,10 @@ public class FantasyTeamScreenDialog extends Stage {
         t.setContract(contractComboBox.getValue().toString());
         contractComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             t.setContract(contractComboBox.getValue().toString());
-
+            if (contractComboBox.getValue().toString().equalsIgnoreCase("S2")) {
+                pickCounter++;
+                t.setPick(pickCounter);
+            }
         });
 
         salaryTextField = new TextField();
@@ -549,8 +562,8 @@ public class FantasyTeamScreenDialog extends Stage {
             int salary = Integer.parseInt(s);
             t.setSalary(salary);
         });
-        
-         // AND FINALLY, THE BUTTONS
+
+        // AND FINALLY, THE BUTTONS
         completeButton = new Button(COMPLETE);
         cancelButton = new Button(CANCEL);
 
@@ -599,6 +612,12 @@ public class FantasyTeamScreenDialog extends Stage {
         editDialogScene = new Scene(editGridPane);
         editDialogScene.getStylesheets().add(PRIMARY_STYLE_SHEET);
         this.setScene(editDialogScene);
+
+        for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
+            if (dataManager.getDraft().getDraftPlayers().get(i).getLastName().equalsIgnoreCase(playerToEdit.getLastName())) {
+                dataManager.getDraft().getDraftPlayers().get(i).setContract("S1");
+            }
+        }
 
         this.setT(t);
 

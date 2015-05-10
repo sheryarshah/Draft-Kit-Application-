@@ -1,6 +1,9 @@
 package wbdk.data;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -26,6 +29,7 @@ public class Draft {
 
     ObservableList<Team> myTeam;
     ObservableList<Team> myTeam1;
+    ObservableList<Team> myTeam2;
 
     ObservableList<Player> atl;
     ObservableList<Player> az;
@@ -48,6 +52,8 @@ public class Draft {
     ObservableList<Team> draftPlayers;
 
     Team t;
+    Team t2;
+    int catWin = 0;
 
     public Draft() {
         players = FXCollections.observableArrayList();
@@ -64,6 +70,7 @@ public class Draft {
         myTeam = FXCollections.observableArrayList();
 
         myTeam1 = FXCollections.observableArrayList();
+        myTeam2 = FXCollections.observableArrayList();
 
         atl = FXCollections.observableArrayList();
         az = FXCollections.observableArrayList();
@@ -573,6 +580,12 @@ public class Draft {
 
     public ObservableList<Team> getTeam1() {
 
+        DecimalFormat dF_ERA_WHIP = new DecimalFormat("#.00");
+        dF_ERA_WHIP.setRoundingMode(RoundingMode.DOWN);
+        
+        DecimalFormat dF_BA = new DecimalFormat("#.00");
+        dF_BA.setRoundingMode(RoundingMode.DOWN);
+        
         for (int i = 0; i < getTeam().size(); i++) {
             int hrCounter = 0;
             int rCounter = 0;
@@ -587,7 +600,6 @@ public class Draft {
             int playerSize = 23;
             int salaryLeft = 260;
             double salaryPP = 0;
-            int totalPoint = 0;
 
             playerSize -= getTeam().get(i).getTeamPlayers().size();
 
@@ -598,22 +610,25 @@ public class Draft {
 
             for (int j = 0; j < getTeam().get(i).getTeamPlayers().size(); j++) {
                 salaryLeft -= getTeam().get(i).getTeamPlayers().get(j).getSalary();
-                if(playerSize != 0){
+                if (playerSize != 0) {
                     salaryPP = salaryLeft / playerSize;
                 }
-                
+
                 if (!getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
                     rCounter += getTeam().get(i).getTeamPlayers().get(j).getRW();
                     hrCounter += getTeam().get(i).getTeamPlayers().get(j).getHR_SV();
                     rbiCounter += getTeam().get(i).getTeamPlayers().get(j).getRBIK();
                     sbCounter += getTeam().get(i).getTeamPlayers().get(j).getSBERA();
                     baCounter += getTeam().get(i).getTeamPlayers().get(j).getBAWHIP();
+                    baCounter = Double.parseDouble(dF_BA.format(baCounter));
                 } else {
                     wCounter += getTeam().get(i).getTeamPlayers().get(j).getRW();
                     svCounter += getTeam().get(i).getTeamPlayers().get(j).getHR_SV();
                     kCounter += getTeam().get(i).getTeamPlayers().get(j).getRBIK();
                     eraCounter += getTeam().get(i).getTeamPlayers().get(j).getSBERA();
+                    eraCounter = Double.parseDouble(dF_ERA_WHIP.format(eraCounter));
                     whipCounter += getTeam().get(i).getTeamPlayers().get(j).getBAWHIP();
+                    whipCounter = Double.parseDouble(dF_ERA_WHIP.format(whipCounter));
                 }
 
                 t.setSalaryLeft(salaryLeft);
@@ -632,18 +647,9 @@ public class Draft {
             }
 
             addTeam1(t);
-            //totalPoint = this.calculateTotalPoint();
         }
 
         return myTeam1;
-    }
-
-    public int calculateTotalPoint() {
-        for (int k = 0; k < getTeam().size(); k++) {
-            System.out.println("efef = " + getTeam1().get(0).getR());
-        }
-
-        return 96;
     }
 
     public void removeTeam1(Team teamToRemove1) {
@@ -652,6 +658,113 @@ public class Draft {
 
     public void clearTeam1() {
         myTeam1.clear();
+    }
+
+    public void calculateTotalPoint() {
+
+    }
+
+    public ObservableList<Team> getTeam2() {
+        ObservableList<Integer> r = FXCollections.observableArrayList();
+        ObservableList<Integer> hr = FXCollections.observableArrayList();
+        ObservableList<Integer> rbi = FXCollections.observableArrayList();
+        ObservableList<Double> sb = FXCollections.observableArrayList();
+        ObservableList<Double> ba = FXCollections.observableArrayList();
+        ObservableList<Integer> w = FXCollections.observableArrayList();
+        ObservableList<Integer> sv = FXCollections.observableArrayList();
+        ObservableList<Integer> k1 = FXCollections.observableArrayList();
+        ObservableList<Double> era = FXCollections.observableArrayList();
+        ObservableList<Double> whip = FXCollections.observableArrayList();
+        
+        int catWin = 0;
+        int size = getTeam().size();
+        
+        for (int k = 0; k < getTeam().size(); k++) {
+            r.add(getTeam1().get(k).getR());
+            hr.add(getTeam1().get(k).getHR());
+            rbi.add(getTeam1().get(k).getRBI());
+            sb.add(getTeam1().get(k).getSB());
+            ba.add(getTeam1().get(k).getBA());
+            w.add(getTeam1().get(k).getW());
+            sv.add(getTeam1().get(k).getSV());
+            k1.add(getTeam1().get(k).getK());
+            era.add(getTeam1().get(k).getERA());
+            whip.add(getTeam1().get(k).getWHIP());
+
+        }
+
+        for (int i = 0; i < getTeam().size(); i++) {
+            t2 = new Team();
+            t2.setName(getTeam1().get(i).getName());
+            t2.setPlayerSize(getTeam1().get(i).getPlayerSize());
+            t2.setSalaryLeft(getTeam1().get(i).getSalaryLeft());
+            t2.setSalaryPP(getTeam1().get(i).getSalaryPP());
+            t2.setR(getTeam1().get(i).getR());
+            t2.setHR(getTeam1().get(i).getHR());
+            t2.setRBI(getTeam1().get(i).getRBI());
+            t2.setSB(getTeam1().get(i).getSB());
+            t2.setBA(getTeam1().get(i).getBA());
+            t2.setW(getTeam1().get(i).getW());
+            t2.setSV(getTeam1().get(i).getSV());
+            t2.setK(getTeam1().get(i).getK());
+            t2.setERA(getTeam1().get(i).getERA());
+            t2.setWHIP(getTeam1().get(i).getWHIP());
+
+          //  Collections.sort(r);
+            //  Collections.sort(hr);
+            //  Collections.sort(rbi);
+            //  Collections.sort(sb);
+            if (t2.getR() > r.get(1)) {
+                catWin++;
+            }
+            if (t2.getHR() > hr.get(1)) {
+                catWin++;
+            }
+            if (t2.getRBI() > rbi.get(1)) {
+                catWin++;
+            }
+            if (t2.getSB() > sb.get(1)) {
+                catWin++;
+            }
+            if (t2.getBA() > sb.get(1)) {
+                catWin++;
+            }
+            if (t2.getW() > w.get(1)) {
+                catWin++;
+            }
+            if (t2.getSV() > sv.get(1)) {
+                catWin++;
+            }
+            if (t2.getK() > k1.get(1)) {
+                catWin++;
+            }
+            if (t2.getERA() > era.get(1)) {
+                catWin++;
+            }
+
+            System.out.println(catWin);
+            t2.setTotalPoints(10 * size);
+
+            System.out.println(r + " " + hr + " " + rbi + " " + sb);
+
+            addTeam2(t2);
+            catWin = 1;
+            size--;
+        }
+
+        return myTeam2;
+    }
+
+    public void addTeam2(Team t2) {
+        myTeam2.add(t2);
+    }
+
+    public void removeTeam2(Team teamToRemove2) {
+        myTeam2.remove(teamToRemove2);
+    }
+
+    public void clearTeam2() {
+        myTeam2.clear();
     }
 
 }

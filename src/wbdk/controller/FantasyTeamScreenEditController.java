@@ -52,10 +52,10 @@ public class FantasyTeamScreenEditController {
         ftsd.showAddTeamDialog();
 
         // DID THE USER CONFIRM?
-        if (ftsd.wasCompleteSelected()) {
+        if (ftsd.wasCompleteSelected1()) {
             // GET THE LECTURE
             // Player p = ftsd.getPlayer();
-            Team t = ftsd.getTeam();
+            Team t = ftsd.getTeam1();
             // AND ADD IT AS A ROW TO THE TABLE
 
             team.addTeam(t);
@@ -145,17 +145,26 @@ public class FantasyTeamScreenEditController {
 
         // DID THE USER CONFIRM?
         if (ftsd.wasCompleteSelected()) {
-            counter = dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().size();
-            System.out.println("fantasy = "+counter);
+
+            for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
+                if (dataManager.getDraft().getDraftPlayers().get(i).getContract().equalsIgnoreCase("S1")) {
+                    dataManager.getDraft().removeDraftPlayers(playerToEdit);
+                }
+            }
+
             if (dataManager.getDraft().getTeam().get(ftsd.getI()).getTeamPlayers().size() >= 23) {
-                dataManager.getDraft().getTeam().get(ftsd.getI()).addTaxiPlayers(ftsd.getAccessPlayer());
+                dataManager.getDraft().getTeam().get(ftsd.getI()).addTaxiPlayers(ftsd.getTeam());
                 dataManager.getDraft().getTeam().get(ftsd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().getTeam().get(trackSelect).removeTeamPlayers(playerToEdit);
 
             } else {
-                dataManager.getDraft().getTeam().get(ftsd.getI()).addTeamPlayers(ftsd.getAccessPlayer());
+                dataManager.getDraft().getTeam().get(ftsd.getI()).addTeamPlayers(ftsd.getTeam());
                 dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().getTeam().get(trackSelect).removeTeamPlayers(playerToEdit);
+            }
+
+            if (ftsd.getAccessPlayer().getContract().equalsIgnoreCase("S2")) {
+                dataManager.getDraft().addDraftPlayers(ftsd.getTeam());
             }
 
             //update toolbar
@@ -165,5 +174,5 @@ public class FantasyTeamScreenEditController {
 
         }
     }
-
+    
 }

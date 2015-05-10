@@ -122,15 +122,18 @@ public class PlayerScreenEditController {
 
         // DID THE USER CONFIRM?
         if (psd.wasCompleteSelected()) {
-            counter++;
             if (dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().size() >= 23) {
                 dataManager.getDraft().getTeam().get(psd.getI()).addTaxiPlayers(psd.getTeam());
                 dataManager.getDraft().getTeam().get(psd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().removePlayer(playerToEdit);
-
             } else {
                 dataManager.getDraft().getTeam().get(psd.getI()).addTeamPlayers(psd.getTeam());
                 dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().sort(new TeamPlayerComparator());
+
+                if (psd.getTeam().getContract().equalsIgnoreCase("S2")) {
+                    dataManager.getDraft().addDraftPlayers(psd.getTeam());
+                }
+
                 dataManager.getDraft().removePlayer(playerToEdit);
             }
 
@@ -401,6 +404,7 @@ public class PlayerScreenEditController {
             t.setNation(player.getNation());
             t.setPick(pickCounter1);
             t.setName(dataManager.getDraft().getTeam().get(teamC).getName());
+
             if (startTaxi) {
                 t.setPositionPlaying(positions);
             }

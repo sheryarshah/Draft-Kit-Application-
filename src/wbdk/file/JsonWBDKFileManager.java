@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import javafx.collections.ObservableList;
@@ -65,7 +66,6 @@ public class JsonWBDKFileManager implements WBDKFileManager {
     String JSON_NATION = "NATION";
     String JSON_YEAR_OF_BIRTH = "YEAR_OF_BIRTH";
     String JSON_NATION_OF_BIRTH = "NATION_OF_BIRTH";
-
     String JSON_RW = "R/W";
     String JSON_HRSV = "HR/SV";
     String JSON_RBIK = "RBI/K";
@@ -79,6 +79,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
     String JSON_PRO_TEAM = "PRO_TEAM";
     String JSON_CONTRACT = "CONTRACT";
     String JSON_SALARY = "SALARY";
+    String JSON_PICK = "PICK";
     String JSON_TEAM_PLAYERS = "TEAM_PLAYERS";
 
     String JSON_EXT = ".json";
@@ -105,10 +106,8 @@ public class JsonWBDKFileManager implements WBDKFileManager {
             hitters.setFirstName(jso.getString(JSON_FIRST_NAME));
             hitters.setQp(jso.getString(JSON_QP).concat("_U"));
             hitters.setAb(Integer.valueOf(jso.getString(JSON_AB)));
-           // hitters.setR(Integer.valueOf(jso.getString(JSON_R)));
             hitters.setRW(Integer.valueOf(jso.getString(JSON_R)));
             hitters.setH(Integer.valueOf(jso.getString(JSON_H)));
-         //   hitters.setHR(Integer.valueOf(jso.getString(JSON_HR)));
             hitters.setHRSV(Integer.valueOf(jso.getString(JSON_HR)));
             hitters.setRBIK(Integer.valueOf(jso.getString(JSON_RBI)));
             hitters.setSBERA(Double.parseDouble(jso.getString(JSON_SB)));
@@ -267,6 +266,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
                 t.setContract(jso1.getString(JSON_CONTRACT));
                 t.setSalary(jso1.getInt(JSON_SALARY));
                 t.setNation(jso1.getString(JSON_NATION));
+                t.setPick(jso1.getInt(JSON_PICK));
                 draftToLoad.getTeam().get(i).addTeamPlayers(t);
             }
 
@@ -385,6 +385,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
                 .add(JSON_CONTRACT, team.getContract())
                 .add(JSON_SALARY, team.getSalary())
                 .add(JSON_NATION, team.getNation())
+                .add(JSON_PICK, team.getPick())
                 .build();
 
         return jso;
