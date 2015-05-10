@@ -215,6 +215,7 @@ public class FileController {
     public void handleDraftScreenRequest(WBDK_GUI gui) {
         gui.draftScreen();
         gui.initDraftScreenWorkspace();
+        gui.updateDraftTable();
         
     }
 

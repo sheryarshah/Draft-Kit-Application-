@@ -124,6 +124,9 @@ public class JsonWBDKFileManager implements WBDKFileManager {
             } else {
                 hitters.setBAWHIP(0.00);
             }
+            
+            //calculating estimated value
+            
 
             playerToLoad.addPlayer(hitters);
 
@@ -158,6 +161,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
             pitchers.setNotes(jso.getString(JSON_NOTES));
             pitchers.setYearOfBirth(Integer.valueOf(jso.getString(JSON_YEAR_OF_BIRTH)));
             pitchers.setNation(jso.getString(JSON_NATION_OF_BIRTH));
+            
 
             //calculating WHIP
             if (pitchers.getIp() > 0) {

@@ -60,6 +60,8 @@ public class FantasyTeamScreenEditController {
 
             team.addTeam(t);
 
+            gui.enableDrafting(true);
+
             //update toolbar
             gui.updateToolbarControls(saved);
         } else {
@@ -99,14 +101,15 @@ public class FantasyTeamScreenEditController {
 
             dataManager.getDraft().getTeam().get(trackSelect).clearTeamPlayers();
             dataManager.getDraft().removeTeam(teamSelectionCombo.getSelectionModel().getSelectedItem());
+            dataManager.getDraft().getDraftPlayers().get(0).clearTeamPlayers();
+            dataManager.getDraft().removeDraftPlayers(teamToRemove);
+
+            for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
+                dataManager.getDraft().getDraftPlayers().get(i).setPick(i + 1);
+            }
 
             teamSelectionCombo.getItems().clear();
-            /*   ObservableList<String> myTeamPlayers = FXCollections.observableArrayList();
-             for(int i = 0; i < dataManager.getDraft().getTeam().size(); i++){
-             myTeamPlayers.addAll(dataManager.getDraft().getTeam().get(i).getName()); 
-             }*/
 
-            //teamSelectionCombo.getItems().remove(trackSelect);
             for (int i = 0; i < dataManager.getDraft().getTeam().size(); i++) {
                 teamSelectionCombo.getItems().add(dataManager.getDraft().getTeam().get(i));
             }
@@ -152,6 +155,10 @@ public class FantasyTeamScreenEditController {
                 }
             }
 
+            for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
+                dataManager.getDraft().getDraftPlayers().get(i).setPick(i + 1);
+            }
+
             if (dataManager.getDraft().getTeam().get(ftsd.getI()).getTeamPlayers().size() >= 23) {
                 dataManager.getDraft().getTeam().get(ftsd.getI()).addTaxiPlayers(ftsd.getTeam());
                 dataManager.getDraft().getTeam().get(ftsd.getI()).getTaxiPlayers().sort(new TeamPlayerComparator());
@@ -174,5 +181,5 @@ public class FantasyTeamScreenEditController {
 
         }
     }
-    
+
 }

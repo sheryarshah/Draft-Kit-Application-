@@ -2,6 +2,7 @@ package wbdk.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.logging.Level;
@@ -60,6 +61,7 @@ import wbdk.controller.FileController;
 import wbdk.controller.PlayerLastNameComparator;
 import wbdk.controller.PlayerLastNameComparator;
 import wbdk.controller.PlayerScreenEditController;
+import wbdk.controller.StandingsPointsComparator;
 import wbdk.data.Draft;
 import wbdk.data.Player;
 import wbdk.data.Team;
@@ -592,8 +594,6 @@ public class WBDK_GUI implements WBDKDataView {
             }
 
         }
-
-        
 
         draftController.enable(true);
     }
@@ -1293,6 +1293,8 @@ public class WBDK_GUI implements WBDKDataView {
 
         dataManager.getDraft().clearTeam2();
 
+        dataManager.getDraft().clearTeam1();
+
         fantasyStandingBox = new VBox();
 
         fantasyStandingTableBox = new VBox();
@@ -1360,7 +1362,7 @@ public class WBDK_GUI implements WBDKDataView {
 
         fantasyStandingTable.setPrefHeight(600);
 
-        fantasyStandingTable.setItems(dataManager.getDraft().getTeam2());
+        fantasyStandingTable.setItems(dataManager.getDraft().getTeam1().sorted(new StandingsPointsComparator()));
 
     }
 
@@ -1507,6 +1509,19 @@ public class WBDK_GUI implements WBDKDataView {
 
         workspacePane.setTop(topWorkspacePaneMLB);
         workspacePane.getStyleClass().add(CLASS_BORDERED_PANE);
+    }
+
+    public void enableDrafting(boolean start) {
+      //  stopSelectPlayer = start;
+      //  this.selectPlayerButtonAction();
+     //   System.out.println(stopSelectPlayer);
+        //   System.out.println(teamC);
+
+        //teamC = 0;
+    //    taxiFlag = true;
+     //   startTaxi = false;
+     //   startingLineUpFlag = true;
+      //  taxiSquadFlag = false;
     }
 
     // INIT ALL THE EVENT HANDLERS
@@ -1657,7 +1672,7 @@ public class WBDK_GUI implements WBDKDataView {
         removeTeamButton.setOnAction(e -> {
             try {
                 fantasyTeamController.handleRemoveTeamRequest(this, teamSelectionCombo.getSelectionModel().getSelectedItem(), trackSelect, teamSelectionCombo);
-
+                this.updateDraftTable();
             } catch (IOException ex) {
                 Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1688,7 +1703,6 @@ public class WBDK_GUI implements WBDKDataView {
     public void selectPlayerButtonAction() {
 
         autoDraftButton.setOnAction(e -> {
-            // startDraft = true;
 
             Task<Void> task = new Task<Void>() {
                 ReentrantLock draftLock = new ReentrantLock();
@@ -1744,7 +1758,6 @@ public class WBDK_GUI implements WBDKDataView {
 
                                     Random r = new Random();
                                     int i1 = r.nextInt(dataManager.getDraft().getPlayers().size() - 1) + 1;
-                                    System.out.println(i1);
                                     Player p = dataManager.getDraft().getPlayers().get(i1);
                                     if (stopSelectPlayer) {
                                         try {
@@ -1816,7 +1829,6 @@ public class WBDK_GUI implements WBDKDataView {
 
             Random r = new Random();
             int i1 = r.nextInt(dataManager.getDraft().getPlayers().size() - 1) + 1;
-            System.out.println(i1);
             Player p = dataManager.getDraft().getPlayers().get(i1);
             try {
 

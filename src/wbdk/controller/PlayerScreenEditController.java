@@ -65,7 +65,7 @@ public class PlayerScreenEditController {
     boolean FlagSS = true;
     boolean FlagU = true;
     boolean FlagOF = true;
-    boolean stop = true;
+    boolean stop = true, stop1 = true, stop2 = true, stop3 = true;
 
     boolean startTaxi = false;
 
@@ -129,12 +129,16 @@ public class PlayerScreenEditController {
             } else {
                 dataManager.getDraft().getTeam().get(psd.getI()).addTeamPlayers(psd.getTeam());
                 dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().sort(new TeamPlayerComparator());
-
+                dataManager.getDraft().removePlayer(playerToEdit);
+               
                 if (psd.getTeam().getContract().equalsIgnoreCase("S2")) {
                     dataManager.getDraft().addDraftPlayers(psd.getTeam());
                 }
 
-                dataManager.getDraft().removePlayer(playerToEdit);
+            }
+
+            for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
+                dataManager.getDraft().getDraftPlayers().get(i).setPick(i + 1);
             }
 
             //update toolbar
@@ -185,21 +189,7 @@ public class PlayerScreenEditController {
 
         System.out.println(positions);
 
-        if (stop) {
-            if (teamC > 0) {
-
-                MIFlag = true;
-                CIFlag = true;
-                CFlag = true;
-                Flag1B = true;
-                Flag2B = true;
-                Flag3B = true;
-                FlagSS = true;
-                FlagU = true;
-                FlagOF = true;
-                stop = false;
-            }
-        }
+        resetPositionFlag(teamC);
 
         if (!startTaxi) {
             if (CFlag) {
@@ -402,7 +392,7 @@ public class PlayerScreenEditController {
             t.setBAWHIP(player.getBAWHIP());
             t.setNotes(player.getNotes());
             t.setNation(player.getNation());
-            t.setPick(pickCounter1);
+            // t.setPick(pickCounter1);
             t.setName(dataManager.getDraft().getTeam().get(teamC).getName());
 
             if (startTaxi) {
@@ -424,10 +414,79 @@ public class PlayerScreenEditController {
             }
 
             dataManager.getDraft().addDraftPlayers(t);
+            for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
+                dataManager.getDraft().getDraftPlayers().get(i).setPick(i + 1);
+            }
 
         }
 
         //    gui.updateToolbarControls(saved);
+    }
+
+    public void resetPositionFlag(int teamC) {
+        if (stop) {
+            if (teamC > 0) {
+
+                MIFlag = true;
+                CIFlag = true;
+                CFlag = true;
+                Flag1B = true;
+                Flag2B = true;
+                Flag3B = true;
+                FlagSS = true;
+                FlagU = true;
+                FlagOF = true;
+                stop = false;
+            }
+        }
+
+        if (stop1) {
+            if (teamC > 1) {
+
+                MIFlag = true;
+                CIFlag = true;
+                CFlag = true;
+                Flag1B = true;
+                Flag2B = true;
+                Flag3B = true;
+                FlagSS = true;
+                FlagU = true;
+                FlagOF = true;
+                stop1 = false;
+            }
+        }
+
+        if (stop2) {
+            if (teamC > 2) {
+
+                MIFlag = true;
+                CIFlag = true;
+                CFlag = true;
+                Flag1B = true;
+                Flag2B = true;
+                Flag3B = true;
+                FlagSS = true;
+                FlagU = true;
+                FlagOF = true;
+                stop2 = false;
+            }
+        }
+
+        if (stop3) {
+            if (teamC > 3) {
+
+                MIFlag = true;
+                CIFlag = true;
+                CFlag = true;
+                Flag1B = true;
+                Flag2B = true;
+                Flag3B = true;
+                FlagSS = true;
+                FlagU = true;
+                FlagOF = true;
+                stop3 = false;
+            }
+        }
     }
 
 }

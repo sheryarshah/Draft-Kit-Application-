@@ -369,156 +369,164 @@ public class FantasyTeamScreenDialog extends Stage {
             //   positionComboBox.getItems().clear();
             ObservableList<String> position = FXCollections.observableArrayList();
             String positions = playerToEdit.getQPosition();
-            if (positions.contains("C")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("C")) {
-                        positionC_counter++;
+            if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().size() != 23) {
+                if (positions.contains("C")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("C")) {
+                            positionC_counter++;
+                        }
+                    }
+                    if (positionC_counter < 2) {
+                        position.add("C");
+                    }
+                    if (positionC_counter > 2) {
+                        positionC_counter = 0;
                     }
                 }
-                if (positionC_counter < 2) {
-                    position.add("C");
-                }
-                if (positionC_counter > 2) {
-                    positionC_counter = 0;
-                }
-            }
-            if (positions.contains("1B")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("1B")) {
-                        position1B_counter++;
+                if (positions.contains("1B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("1B")) {
+                            position1B_counter++;
 
+                        }
+                    }
+                    if (position1B_counter < 1) {
+                        position.add("1B");
+                    }
+                    if (position1B_counter > 1) {
+                        position1B_counter = 0;
+                    }
+
+                }
+
+                if (positions.contains("3B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("3B")) {
+                            position3B_counter++;
+
+                        }
+                    }
+                    if (position3B_counter < 1) {
+                        position.add("3B");
+                    }
+                    if (position3B_counter > 1) {
+                        position3B_counter = 0;
+                    }
+
+                }
+                if (positions.contains("2B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("2B")) {
+                            position2B_counter++;
+
+                        }
+                    }
+                    if (position2B_counter < 1) {
+                        position.add("2B");
+                    }
+                    if (position2B_counter > 1) {
+                        position2B_counter = 0;
+                    }
+
+                }
+
+                if (positions.contains("SS")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("SS")) {
+                            positionSS_counter++;
+
+                        }
+                    }
+                    if (positionSS_counter < 1) {
+                        position.add("SS");
+                    }
+                    if (positionSS_counter > 1) {
+                        positionSS_counter = 0;
                     }
                 }
-                if (position1B_counter < 1) {
-                    position.add("1B");
-                }
-                if (position1B_counter > 1) {
-                    position1B_counter = 0;
-                }
+                if (positions.contains("OF")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("OF")) {
+                            positionOF_counter++;
 
-            }
-
-            if (positions.contains("3B")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("3B")) {
-                        position3B_counter++;
-
+                        }
+                    }
+                    if (positionOF_counter < 5) {
+                        position.add("OF");
+                    }
+                    if (positionOF_counter > 5) {
+                        positionOF_counter = 0;
                     }
                 }
-                if (position3B_counter < 1) {
-                    position.add("3B");
-                }
-                if (position3B_counter > 1) {
-                    position3B_counter = 0;
-                }
+                if (positions.contains("U")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("U")) {
+                            positionU_counter++;
 
-            }
-            if (positions.contains("2B")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("2B")) {
-                        position2B_counter++;
-
+                        }
+                    }
+                    if (positionU_counter < 1) {
+                        position.add("U");
+                    }
+                    if (positionU_counter > 1) {
+                        positionU_counter = 0;
                     }
                 }
-                if (position2B_counter < 1) {
-                    position.add("2B");
-                }
-                if (position2B_counter > 1) {
-                    position2B_counter = 0;
-                }
+                if (positions.contains("P")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
+                            positionP_counter++;
 
-            }
-
-            if (positions.contains("SS")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("SS")) {
-                        positionSS_counter++;
-
+                        }
+                    }
+                    if (positionP_counter < 9) {
+                        position.add("P");
+                    }
+                    if (positionP_counter > 1) {
+                        positionP_counter = 0;
                     }
                 }
-                if (positionSS_counter < 1) {
-                    position.add("SS");
-                }
-                if (positionSS_counter > 1) {
-                    positionSS_counter = 0;
-                }
-            }
-            if (positions.contains("OF")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("OF")) {
-                        positionOF_counter++;
+                if (positions.contains("2B") || positions.contains("SS")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("MI")) {
+                            positionMI_counter++;
 
+                        }
+                    }
+                    if (positionMI_counter < 1) {
+                        position.add("MI");
+                    }
+                    if (positionMI_counter > 1) {
+                        positionMI_counter = 0;
                     }
                 }
-                if (positionOF_counter < 5) {
-                    position.add("OF");
-                }
-                if (positionOF_counter > 5) {
-                    positionOF_counter = 0;
-                }
-            }
-            if (positions.contains("U")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("U")) {
-                        positionU_counter++;
+                if (positions.contains("1B") || positions.contains("3B")) {
+                    for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
+                        if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("CI")) {
+                            positionCI_counter++;
 
+                        }
+                    }
+                    if (positionCI_counter < 1) {
+                        position.add("CI");
+                    }
+                    if (positionCI_counter > 1) {
+                        positionCI_counter = 0;
                     }
                 }
-                if (positionU_counter < 1) {
-                    position.add("U");
-                }
-                if (positionU_counter > 1) {
-                    positionU_counter = 0;
-                }
-            }
-            if (positions.contains("P")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("P")) {
-                        positionP_counter++;
 
-                    }
-                }
-                if (positionP_counter < 9) {
-                    position.add("P");
-                }
-                if (positionP_counter > 1) {
-                    positionP_counter = 0;
-                }
-            }
-            if (positions.contains("2B") || positions.contains("SS")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("MI")) {
-                        positionMI_counter++;
-
-                    }
-                }
-                if (positionMI_counter < 1) {
-                    position.add("MI");
-                }
-                if (positionMI_counter > 1) {
-                    positionMI_counter = 0;
-                }
-            }
-            if (positions.contains("1B") || positions.contains("3B")) {
-                for (int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++) {
-                    if (dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j).getPositionPlaying().equalsIgnoreCase("CI")) {
-                        positionCI_counter++;
-
-                    }
-                }
-                if (positionCI_counter < 1) {
-                    position.add("CI");
-                }
-                if (positionCI_counter > 1) {
-                    positionCI_counter = 0;
-                }
+                positionComboBox.getSelectionModel().clearSelection();
+                positionComboBox.getItems().clear();
+                positionComboBox.getSelectionModel().clearSelection();
+                positionComboBox.getItems().addAll(position);
+                positionComboBox.setValue(position.get(0));
+            } else {
+                positionComboBox.getSelectionModel().clearSelection();
+                positionComboBox.getItems().clear();
+                positionComboBox.getSelectionModel().clearSelection();
+                positionComboBox.setValue(playerToEdit.getPositionPlaying());
             }
 
-            positionComboBox.getSelectionModel().clearSelection();
-            positionComboBox.getItems().clear();
-            positionComboBox.getSelectionModel().clearSelection();
-            positionComboBox.getItems().addAll(position);
-            positionComboBox.setValue(position.get(0));
             t.setPositionPlaying(positionComboBox.getValue().toString());
             positionComboBox.valueProperty().addListener((observable1, oldValue1, newValue1) -> {
                 if (newValue1 != null) {
