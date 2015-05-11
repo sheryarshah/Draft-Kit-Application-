@@ -19,7 +19,7 @@ import wbdk.data.Team;
 import wbdk.data.WBDKDataManager;
 import wbdk.gui.FantasyTeamScreenDialog;
 import wbdk.gui.MessageDialog;
-import wbdk.gui.TeamPlayerComparator;
+import wbdk.sort.TeamPlayerComparator;
 import wbdk.gui.WBDK_GUI;
 import wbdk.gui.YesNoCancelDialog;
 
@@ -95,14 +95,47 @@ public class FantasyTeamScreenEditController {
                 p.setBAWHIP(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().get(i).getBAWHIP());
                 p.setNotes(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().get(i).getNotes());
                 p.setNation(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().get(i).getNation());
+                p.setEstimatedValue(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().get(i).getEstimatedValue());
+
+                dataManager.getDraft().addPlayer(p);
+            }
+
+            for (int i = 0; i < dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().size(); i++) {
+                Player p = new Player();
+                p.setFirstName(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getFirstName());
+                p.setLastName(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getLastName());
+                p.setTeam(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getProTeam());
+                p.setQp(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getQPosition());
+                p.setYearOfBirth(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getYearOfBirth());
+                p.setRW(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getRW());
+                p.setHRSV(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getHR_SV());
+                p.setRBIK(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getRBIK());
+                p.setSBERA(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getSBERA());
+                p.setBAWHIP(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getBAWHIP());
+                p.setNotes(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getNotes());
+                p.setNation(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getNation());
+                p.setEstimatedValue(dataManager.getDraft().getTeam().get(trackSelect).getTaxiPlayers().get(i).getEstimatedValue());
 
                 dataManager.getDraft().addPlayer(p);
             }
 
             dataManager.getDraft().getTeam().get(trackSelect).clearTeamPlayers();
+            
+            for (int i = 0; i < dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().size(); i++) {
+                dataManager.getDraft().getDraftPlayers().get(i).clearTeamPlayers();
+                dataManager.getDraft().removeDraftPlayers(dataManager.getDraft().getTeam().get(trackSelect).getTeamPlayers().get(i));
+            }
+            
             dataManager.getDraft().removeTeam(teamSelectionCombo.getSelectionModel().getSelectedItem());
-            dataManager.getDraft().getDraftPlayers().get(0).clearTeamPlayers();
-            dataManager.getDraft().removeDraftPlayers(teamToRemove);
+            
+            for(int i = 0; i < dataManager.getDraft().getTeam().size(); i++){
+                for(int j = 0; j < dataManager.getDraft().getTeam().get(i).getTeamPlayers().size(); j++){
+                    dataManager.getDraft().addDraftPlayers(dataManager.getDraft().getTeam().get(i).getTeamPlayers().get(j));
+                }
+            }
+
+            
+            
 
             for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
                 dataManager.getDraft().getDraftPlayers().get(i).setPick(i + 1);

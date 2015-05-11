@@ -10,7 +10,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import javafx.collections.ObservableList;
@@ -123,10 +122,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
                 hitters.setBAWHIP(ba);
             } else {
                 hitters.setBAWHIP(0.00);
-            }
-            
-            //calculating estimated value
-            
+            }        
 
             playerToLoad.addPlayer(hitters);
 
@@ -233,6 +229,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
             p.setBAWHIP(Double.parseDouble(jso.getString(JSON_BAWHIP)));
             p.setNotes(jso.getString(JSON_NOTES));
             p.setNation(jso.getString(JSON_NATION));
+          //  p.setEstimatedValue(Double.parseDouble(jso.getString(JSON_ESTIMATED_VALUE)));
 
             // ADD IT TO THE DRAFT
             draftToLoad.addPlayer(p);
@@ -271,6 +268,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
                 t.setSalary(jso1.getInt(JSON_SALARY));
                 t.setNation(jso1.getString(JSON_NATION));
                 t.setPick(jso1.getInt(JSON_PICK));
+          //      t.setEstimatedValue(Double.parseDouble(jso1.getString(JSON_ESTIMATED_VALUE)));
                 draftToLoad.getTeam().get(i).addTeamPlayers(t);
             }
 
@@ -330,6 +328,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
                 .add(JSON_BAWHIP, bawhip)
                 .add(JSON_NOTES, player.getNotes())
                 .add(JSON_NATION, player.getNation())
+               // .add(JSON_ESTIMATED_VALUE, player.getEstimatedValue())
                 .build();
         return jso;
     }
@@ -390,6 +389,7 @@ public class JsonWBDKFileManager implements WBDKFileManager {
                 .add(JSON_SALARY, team.getSalary())
                 .add(JSON_NATION, team.getNation())
                 .add(JSON_PICK, team.getPick())
+               // .add(JSON_ESTIMATED_VALUE, team.getEstimatedValue())
                 .build();
 
         return jso;

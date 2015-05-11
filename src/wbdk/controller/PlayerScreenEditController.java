@@ -23,7 +23,7 @@ import wbdk.data.Team;
 import wbdk.data.WBDKDataManager;
 import wbdk.gui.MessageDialog;
 import wbdk.gui.PlayerScreenDialog;
-import wbdk.gui.TeamPlayerComparator;
+import wbdk.sort.TeamPlayerComparator;
 import wbdk.gui.WBDK_GUI;
 import wbdk.gui.YesNoCancelDialog;
 
@@ -130,7 +130,7 @@ public class PlayerScreenEditController {
                 dataManager.getDraft().getTeam().get(psd.getI()).addTeamPlayers(psd.getTeam());
                 dataManager.getDraft().getTeam().get(psd.getI()).getTeamPlayers().sort(new TeamPlayerComparator());
                 dataManager.getDraft().removePlayer(playerToEdit);
-               
+
                 if (psd.getTeam().getContract().equalsIgnoreCase("S2")) {
                     dataManager.getDraft().addDraftPlayers(psd.getTeam());
                 }
@@ -139,6 +139,7 @@ public class PlayerScreenEditController {
 
             for (int i = 0; i < dataManager.getDraft().getDraftPlayers().size(); i++) {
                 dataManager.getDraft().getDraftPlayers().get(i).setPick(i + 1);
+                dataManager.getDraft().getDraftPlayers().get(i).setName(dataManager.getDraft().getTeam().get(psd.getI()).getName());
             }
 
             //update toolbar
@@ -187,8 +188,7 @@ public class PlayerScreenEditController {
 
         String positions = player.getQp();
 
-        System.out.println(positions);
-
+        //System.out.println(positions);
         resetPositionFlag(teamC);
 
         if (!startTaxi) {
@@ -390,8 +390,10 @@ public class PlayerScreenEditController {
             t.setRBIK(player.getRBIK());
             t.setSBERA(player.getSBERA());
             t.setBAWHIP(player.getBAWHIP());
+            t.setEstimatedValue(player.getEstimatedValue());
             t.setNotes(player.getNotes());
             t.setNation(player.getNation());
+
             // t.setPick(pickCounter1);
             t.setName(dataManager.getDraft().getTeam().get(teamC).getName());
 
@@ -420,7 +422,6 @@ public class PlayerScreenEditController {
 
         }
 
-        //    gui.updateToolbarControls(saved);
     }
 
     public void resetPositionFlag(int teamC) {

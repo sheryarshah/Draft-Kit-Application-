@@ -212,7 +212,7 @@ public class FileController {
      *
      * @param gui The user interface editing the Draft.
      */
-    public void handleDraftScreenRequest(WBDK_GUI gui) {
+    public void handleDraftScreenRequest(WBDK_GUI gui) throws IOException {
         gui.draftScreen();
         gui.initDraftScreenWorkspace();
         gui.updateDraftTable();

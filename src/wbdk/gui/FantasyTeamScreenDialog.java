@@ -549,6 +549,7 @@ public class FantasyTeamScreenDialog extends Stage {
         t.setBAWHIP(playerToEdit.getBAWHIP());
         t.setNotes(playerToEdit.getNotes());
         t.setNation(playerToEdit.getNation());
+        t.setEstimatedValue(playerToEdit.getEstimatedValue());
 
         ObservableList<String> contract = FXCollections.observableArrayList("X", "S1", "S2");
 

@@ -40,8 +40,19 @@ public class Player {
     final DoubleProperty estimatedValue;
     final StringProperty nation;
 
-   // final IntegerProperty R;
-//    final IntegerProperty HR;
+    int rankR;
+    int rankHR;
+    int rankRBI;
+    int rankSB;
+    int rankBA;
+
+    int rankW;
+    int rankK;
+    int rankSV;
+    int rankERA;
+    int rankWHIP;
+
+    double averageRank;
 
     public Player() {
 
@@ -69,8 +80,95 @@ public class Player {
         BAWHIP = new SimpleDoubleProperty(-1.0);
 
       //  R = new SimpleIntegerProperty(-1);
-      //  HR = new SimpleIntegerProperty(-1);
+        //  HR = new SimpleIntegerProperty(-1);
+    }
 
+    public int getRankR() {
+        return rankR;
+    }
+
+    public void setRankR(int rankR) {
+        this.rankR = rankR;
+    }
+
+    public int getRankHR() {
+        return rankHR;
+    }
+
+    public void setRankHR(int rankHR) {
+        this.rankHR = rankHR;
+    }
+
+    public int getRankRBI() {
+        return rankRBI;
+    }
+
+    public void setRankRBI(int rankRBI) {
+        this.rankRBI = rankRBI;
+    }
+
+    public int getRankSB() {
+        return rankSB;
+    }
+
+    public void setRankSB(int rankSB) {
+        this.rankSB = rankSB;
+    }
+
+    public int getRankBA() {
+        return rankBA;
+    }
+
+    public void setRankBA(int rankBA) {
+        this.rankBA = rankBA;
+    }
+
+    public int getRankW() {
+        return rankW;
+    }
+
+    public void setRankW(int rankW) {
+        this.rankW = rankW;
+    }
+
+    public int getRankK() {
+        return rankK;
+    }
+
+    public void setRankK(int rankK) {
+        this.rankK = rankK;
+    }
+
+    public int getRankSV() {
+        return rankSV;
+    }
+
+    public void setRankSV(int rankSV) {
+        this.rankSV = rankSV;
+    }
+
+    public int getRankERA() {
+        return rankERA;
+    }
+
+    public void setRankERA(int rankERA) {
+        this.rankERA = rankERA;
+    }
+
+    public int getRankWHIP() {
+        return rankWHIP;
+    }
+
+    public void setRankWHIP(int rankWHIP) {
+        this.rankWHIP = rankWHIP;
+    }
+
+    public double getAverageRank() {
+        return averageRank;
+    }
+
+    public void setAverageRank(double averageRank) {
+        this.averageRank = averageRank;
     }
 
     public String getTeam() {

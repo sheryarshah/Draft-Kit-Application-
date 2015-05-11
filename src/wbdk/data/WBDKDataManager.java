@@ -74,7 +74,6 @@ public class WBDKDataManager {
         draft.getPlayers().clear();
         draft.getTeam().clear();
         draft.getDraftPlayers().clear();
-        draft.getTeam2().clear();
         draft.getTeam1().clear();
 
         try {

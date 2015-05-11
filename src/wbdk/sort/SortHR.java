@@ -7,22 +7,20 @@ package wbdk.sort;
 
 import java.util.Comparator;
 import wbdk.data.Player;
-import wbdk.data.Team;
 
 /**
  *
  * @author Sheryar
  */
-public class SortR implements Comparator<Player>{
-
+public class SortHR implements Comparator<Player> {
 
     @Override
     public int compare(Player o1, Player o2) {
         int j = 0;
-        if(!o2.getQp().equalsIgnoreCase("P") || !o1.getQp().equalsIgnoreCase("P")){
-            j = o2.getRW() - o1.getRW();
+        if (!o2.getQp().equalsIgnoreCase("P") || !o1.getQp().equalsIgnoreCase("P")) {
+            j = o2.getHR_SV() - o1.getHR_SV();
         }
+
         return j;
     }
-    
 }

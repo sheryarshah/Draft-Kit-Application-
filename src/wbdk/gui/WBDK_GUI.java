@@ -58,10 +58,10 @@ import static wbdk.WBDK_StartupConstants.PATH_IMAGES;
 import wbdk.controller.DraftEditController;
 import wbdk.controller.FantasyTeamScreenEditController;
 import wbdk.controller.FileController;
-import wbdk.controller.PlayerLastNameComparator;
-import wbdk.controller.PlayerLastNameComparator;
+import wbdk.sort.PlayerLastNameComparator;
+import wbdk.sort.PlayerLastNameComparator;
 import wbdk.controller.PlayerScreenEditController;
-import wbdk.controller.StandingsPointsComparator;
+import wbdk.sort.StandingsPointsComparator;
 import wbdk.data.Draft;
 import wbdk.data.Player;
 import wbdk.data.Team;
@@ -798,6 +798,7 @@ public class WBDK_GUI implements WBDKDataView {
         rbi_k.setCellValueFactory(new PropertyValueFactory<>("RBIK"));
         sb_era.setCellValueFactory(new PropertyValueFactory<>("SBERA"));
         ba_whip.setCellValueFactory(new PropertyValueFactory<>("BAWHIP"));
+        estimated.setCellValueFactory(new PropertyValueFactory<>("estimatedValue"));
         contract.setCellValueFactory(new PropertyValueFactory<>("contract"));
         salary.setCellValueFactory(new PropertyValueFactory<>("salary"));
 
@@ -857,6 +858,7 @@ public class WBDK_GUI implements WBDKDataView {
         rbi_k1.setCellValueFactory(new PropertyValueFactory<>("RBIK"));
         sb_era1.setCellValueFactory(new PropertyValueFactory<>("SBERA"));
         ba_whip1.setCellValueFactory(new PropertyValueFactory<>("BAWHIP"));
+        estimated1.setCellValueFactory(new PropertyValueFactory<>("estimatedValue"));
         contract1.setCellValueFactory(new PropertyValueFactory<>("contract"));
         salary1.setCellValueFactory(new PropertyValueFactory<>("salary"));
 
@@ -914,7 +916,7 @@ public class WBDK_GUI implements WBDKDataView {
 
     }
 
-    public void draftScreen() {
+    public void draftScreen() throws IOException {
         draftBox = new VBox();
         draftToolbarBox = new HBox();
 
@@ -965,7 +967,6 @@ public class WBDK_GUI implements WBDKDataView {
     }
 
     public void updateDraftTable() {
-
         draftTable.setItems(dataManager.getDraft().getDraftPlayers());
     }
 
@@ -1079,6 +1080,7 @@ public class WBDK_GUI implements WBDKDataView {
             playerRbi_K.setCellValueFactory(new PropertyValueFactory<>("RBIK"));
             playerSb_Era.setCellValueFactory(new PropertyValueFactory<>("SBERA"));
             playerBa_Whip.setCellValueFactory(new PropertyValueFactory<>("BAWHIP"));
+            playerEstimatedValue.setCellValueFactory(new PropertyValueFactory<>("estimatedValue"));
             playerNotes.setCellValueFactory(new PropertyValueFactory<>("notes"));
 
             //THIS ALLOWS TO SEARCH PLAYERS BY TYPING EITHER FIRST OR LAST NAME
@@ -1291,8 +1293,6 @@ public class WBDK_GUI implements WBDKDataView {
 
     public void fantasyStandingSceen() {
 
-        dataManager.getDraft().clearTeam2();
-
         dataManager.getDraft().clearTeam1();
 
         fantasyStandingBox = new VBox();
@@ -1363,6 +1363,11 @@ public class WBDK_GUI implements WBDKDataView {
         fantasyStandingTable.setPrefHeight(600);
 
         fantasyStandingTable.setItems(dataManager.getDraft().getTeam1().sorted(new StandingsPointsComparator()));
+        dataManager.getDraft().setTeamPoints();
+
+    }
+
+    public void setFantasyStandingTable() {
 
     }
 
@@ -1513,15 +1518,15 @@ public class WBDK_GUI implements WBDKDataView {
 
     public void enableDrafting(boolean start) {
       //  stopSelectPlayer = start;
-      //  this.selectPlayerButtonAction();
-     //   System.out.println(stopSelectPlayer);
+        //  this.selectPlayerButtonAction();
+        //   System.out.println(stopSelectPlayer);
         //   System.out.println(teamC);
 
         //teamC = 0;
-    //    taxiFlag = true;
-     //   startTaxi = false;
-     //   startingLineUpFlag = true;
-      //  taxiSquadFlag = false;
+        //    taxiFlag = true;
+        //   startTaxi = false;
+        //   startingLineUpFlag = true;
+        //  taxiSquadFlag = false;
     }
 
     // INIT ALL THE EVENT HANDLERS
@@ -1562,11 +1567,16 @@ public class WBDK_GUI implements WBDKDataView {
         });
 
         draftScreenButton.setOnAction(e -> {
-            fileController.handleDraftScreenRequest(this);
+            try {
+                fileController.handleDraftScreenRequest(this);
+            } catch (IOException ex) {
+                Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         playerScreenButton.setOnAction(e -> {
             try {
                 fileController.handlePlayerScreenRequest(this);
+                dataManager.getDraft().setEstimatedValue();
             } catch (IOException ex) {
                 Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1574,6 +1584,7 @@ public class WBDK_GUI implements WBDKDataView {
         });
         fantasyStandingScreenButton.setOnAction(e -> {
             fileController.handleFantasyStandingRequest(this);
+            //this.setFantasyStandingTable();
         });
         MLBTeamScreenButton.setOnAction(e -> {
             try {
@@ -1671,7 +1682,9 @@ public class WBDK_GUI implements WBDKDataView {
         });
         removeTeamButton.setOnAction(e -> {
             try {
+                draftTable.getItems().clear();
                 fantasyTeamController.handleRemoveTeamRequest(this, teamSelectionCombo.getSelectionModel().getSelectedItem(), trackSelect, teamSelectionCombo);
+                //  dataManager.getDraft().getDraftPlayers().clear();
                 this.updateDraftTable();
             } catch (IOException ex) {
                 Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -1700,7 +1713,7 @@ public class WBDK_GUI implements WBDKDataView {
 
     }
 
-    public void selectPlayerButtonAction() {
+    public void selectPlayerButtonAction() throws IOException {
 
         autoDraftButton.setOnAction(e -> {
 
@@ -1715,6 +1728,9 @@ public class WBDK_GUI implements WBDKDataView {
                         pauseDraftButton.setOnAction(e -> {
                             startDraft = false;
                         });
+                        int size = dataManager.getDraft().getTeam().size();
+                        size = size * 31;
+                        size += 100;
                         for (int k = 0; k < 500; k++) {
 
                             if (startDraft) {
@@ -1724,6 +1740,7 @@ public class WBDK_GUI implements WBDKDataView {
 
                                     if (taxiFlag) {
                                         counter1++;
+                                        stopSelectPlayer = true;
                                         if (dataManager.getDraft().getTeam().get(teamC).getTeamPlayers().size() >= 23) {
                                             teamC++;
                                             counter1 = 1;
@@ -1753,6 +1770,10 @@ public class WBDK_GUI implements WBDKDataView {
                                         if (dataManager.getDraft().getTeam().size() - 1 < teamC) {
                                             stopSelectPlayer = false;
                                             messageDialog.show("All the teams are filled");
+                                            taxiFlag = true;
+                                            startTaxi = false;
+                                            startingLineUpFlag = true;
+                                            taxiSquadFlag = false;
                                         }
                                     }
 
@@ -1786,6 +1807,12 @@ public class WBDK_GUI implements WBDKDataView {
             //THIS GETS THE THREAD STARTED
             Thread thread = new Thread(task);
             thread.start();
+
+            try {
+                this.updateToolbarControls(false);
+            } catch (IOException ex) {
+                Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
 
         });
 
@@ -1836,6 +1863,12 @@ public class WBDK_GUI implements WBDKDataView {
                     playerController.handleSelectPlayerRequest(p, dataManager, pickCounter, teamC);
                 }
 
+            } catch (IOException ex) {
+                Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            try {
+                this.updateToolbarControls(false);
             } catch (IOException ex) {
                 Logger.getLogger(WBDK_GUI.class.getName()).log(Level.SEVERE, null, ex);
             }
