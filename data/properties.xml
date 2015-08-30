@@ -22,6 +22,9 @@
 		<property name="FANTASY_TEAM_STANDING_SCREEN_ICON" 		value="FantasyStandingScreen.png"></property>
 		<property name="DRAFT_SCREEN_ICON" 						value="DraftScreen.png"></property>
 		<property name="MLB_TEAM_SCREEN_ICON" 					value="MLBTeamScreen.png"></property>
+		<property name="SELECT_PLAYER_ICON" 					value="SelectPlayer.png"></property>
+		<property name="AUTO_DRAFT_ICON" 						value="AutoDraft.png"></property>
+		<property name="PAUSE_DRAFT_ICON" 						value="PauseDraft.png"></property>
         
         <!-- TOOLTIPS FOR BUTTONS -->
         <property name="NEW_DRAFT_TOOLTIP"        		 	value="Create a New Draft"></property>
@@ -39,6 +42,9 @@
 		<property name="ADD_TEAM_TOOLTIP"         			value="Add Fantasy Team"></property>
 		<property name="REMOVE_TEAM_TOOLTIP"         		value="Remove Fantasy Team"></property>
 		<property name="EDIT_TEAM_TOOLTIP"      			value="Edit Team Name and Owner"></property>
+		<property name="SELECT_PLAYER_TOOLTIP"      		value="Select Player"></property>
+		<property name="AUTO_DRAFT_TOOLTIP"      			value="Start Auto Draft"></property>
+		<property name="PAUSE_DRAFT_TOOLTIP"      			value="Pause Auto Draft"></property>
         
         <!-- GUI LABELS -->
         <property name="DRAFT_HEADING_LABEL"           		value="Draft Summary"></property>
@@ -55,10 +61,6 @@
 		<property name="PRO_TEAM_HEADING_LABEL"      		value="Pro Team Players"></property>
         
         <!-- ERROR MESSAGES -->
-        <property name="START_DATE_AFTER_END_DATE_ERROR_MESSAGE"    value="The Starting Monday cannot be chronologically after the Ending Friday"></property>
-        <property name="START_DATE_NOT_A_MONDAY_ERROR_MESSAGE"      value="The Start Date must be a Monday"></property>
-        <property name="END_DATE_NOT_A_FRIDAY_ERROR_MESSAGE"        value="The End Date must be a Friday"></property>
-        <property name="ILLEGAL_DATE_MESSAGE"                       value="Illegal Date Selection"></property>
         <property name="CLOSE_BUTTON_TEXT"                          value="Close"></property>
 
         <!-- VERIFICATION MESSAGES -->
